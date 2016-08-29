@@ -1,0 +1,48 @@
+// "use strict";
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+//
+// class Slider extends React.Component {
+//   constructor (){
+//     super();
+//     this.state = {
+//       minLoanAmount: '3000',
+//       maxLoanAmount: '35000',
+//       loanAmount:'15000'
+//     }
+//     this.update = this.update.bind(this)
+//   }
+//
+//   update (e){
+//     console.log('what is loanAmount', ReactDOM.findDOMNode(this.refs.loan).value);
+//     this.setState({
+//       loanAmount: ReactDOM.findDOMNode(this.refs.loan).value
+//     })
+//   }
+//
+//   render (){
+//     return (
+//       <div>
+//         <hr />
+//         {this.state.loanAmount}
+//         <br />
+//
+//         <span>{this.state.minLoanAmount}</span>
+//         <input ref="loan" type="range"
+//                min={this.state.minLoanAmount}
+               {/*max={this.state.maxLoanAmount}*/}
+               {/*step = "1000"*/}
+//                value = {this.state.loanAmount}
+//                onChange={this.update} />
+//         <span>{this.state.maxLoanAmount}</span>
+//       </div>
+//     )
+//   }
+// }
+//
+// ReactDOM.render(
+//   <Slider />,
+//   document.getElementById('app2')
+// )
+//
+//

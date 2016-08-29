@@ -90,7 +90,7 @@ module.exports = {
     // Reduntant package.json script entry does not do that, but required for .babelrc
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('development') // eslint-disable-line quote-props
+        'NODE_ENV': JSON.stringify('production') // eslint-disable-line quote-props
       }
     }),
     new webpack.HotModuleReplacementPlugin(),
