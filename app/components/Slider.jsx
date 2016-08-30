@@ -14,16 +14,14 @@ class Slider extends React.Component {
       step: props.step,
       dragging: false,
       pos: {
-        x: 0,
-        y: 0
+        x: 0
       },
       maxPositionX: {
         left: 0,
         right: 0,
       },
       rel:{
-        x:0,
-        y:0
+        x:0
       }
     }
     this.update = this.update.bind(this)
@@ -31,6 +29,9 @@ class Slider extends React.Component {
     this.onMouseDown = this.onMouseDown.bind(this)
     this.onMouseUp = this.onMouseUp.bind(this)
     this.handleResize = this.handleResize.bind(this)
+    this.getInputPositionX=this.getInputPositionX.bind(this)
+    this.setNewPositionX = this.setNewPositionX.bind(this)
+    this.moveButton=this.moveButton.bind(this)
     // this.touchstart = this.touchstart.bind(this)
     // this.touchmove = this.touchmove.bind(this)
     // this.touchend = this.touchend.bind(this)
@@ -47,27 +48,20 @@ class Slider extends React.Component {
 
   onMouseDown (e){
     // only left mouse button
-    console.log('what is e', e.touches[0].pageX)
     if(e.button === 0 || (e.touches && e.touches.length)){
-      const pos = e.currentTarget.getBoundingClientRect();
-      console.log('mouseDown :What is pos', pos.left);
+      const position = e.currentTarget.getBoundingClientRect();
+      const pageX = this.getInputPositionX(e);
 
-      const pageX = e.pageX || e.touches[0].pageX
-      console.log('mouseDown: what is pageX', pageX)
       this.setState({
         dragging: true,
         rel: {
-          x: pageX - pos.left,
-          y: e.pageY - pos.top
+          x: pageX - position.left
         }
       })
-
-      console.log('mouseDown: what is relX', (this.state.rel) ? this.state.rel.x : null);
       e.stopPropagation()
       e.preventDefault()
     }
   }
-
   onMouseUp (e){
     this.setState({
       dragging: false
@@ -75,46 +69,43 @@ class Slider extends React.Component {
     e.stopPropagation()
     e.preventDefault()
   }
-
+  getInputPositionX(e){
+    return e.pageX || e.touches[0].pageX;
+  }
+  setNewPositionX(position){
+    position = (position <= this.state.maxPositionX.left)
+      ? this.state.maxPositionX.left
+      : (position >= this.state.maxPositionX.right)
+      ? this.state.maxPositionX.right
+      : position;
+    const newPosition = position - this.state.rel.x;
+    this.setState({
+      pos: {
+        x: newPosition
+      }
+    })
+    return newPosition;
+  }
+  moveButton(){
+    const newPosition = this.state.pos.x - this.state.maxPositionX.left;
+    console.log('moveButton: what is newPosition', newPosition)
+    ReactDOM.findDOMNode(this.refs.button).style.left = `${newPosition}px`
+  }
   onMouseMove (e){
     if(this.state.dragging){
-      const pageX = e.pageX || e.touches[0].pageX
-      const isOutOfLeftBound = (pageX <= this.state.maxPositionX.left) ? true : false;
-      const isOutOfRightBound = (pageX >= this.state.maxPositionX.right) ? true : false;
-      let modifiedX;
-      if(isOutOfLeftBound) {
-        modifiedX= this.state.maxPositionX.left;
-      } else if(isOutOfRightBound){
-        modifiedX=this.state.maxPositionX.right;
-      } else {
-        modifiedX=pageX;
-      }
-      this.setState({
-        pos: {
-          x: (modifiedX - this.state.rel.x),
-          y: e.pageY - this.state.rel.y
-        }
-      })
-
-
-      const newPosition = this.state.pos.x;
-      const modifiedPosition = newPosition - this.state.maxPositionX.left;
-      ReactDOM.findDOMNode(this.refs.button).style.left =`${modifiedPosition}px`;
+      this.setNewPositionX(this.getInputPositionX(e));
       e.stopPropagation()
       e.preventDefault()
     }
   }
-
   componentDidMount (){
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
     document.addEventListener('touchmove', this.onMouseMove);
     document.addEventListener('touchend', this.onMouseUp);
     window.addEventListener('resize', this.handleResize);
-    const button = this.refs.button;
-    ReactDOM.findDOMNode(button).addEventListener('mousedown', this.onMouseDown)
-    ReactDOM.findDOMNode(button).addEventListener('touchstart', this.onMouseDown)
-    // ReactDOM.findDOMNode(button).addEventListener('mousedown', this.onMouseDown);
+    ReactDOM.findDOMNode(this.refs.button).addEventListener('mousedown', this.onMouseDown)
+    ReactDOM.findDOMNode(this.refs.button).addEventListener('touchstart', this.onMouseDown)
     const progressBar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
     this.setState({
       maxPositionX: {
@@ -122,34 +113,63 @@ class Slider extends React.Component {
         right: progressBar.right
       }
     })
+    this.setState({
+      pos: {
+        x: progressBar.left
+      }
+    })
+    this.moveButton();
   }
-
   handleResize (e){
     const progressBar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
+    console.log('handleResize: old Left', this.state.maxPositionX.left);
+    console.log('handleResize: new Left', progressBar.left);
+
+    console.log('handleResize: old right', this.state.maxPositionX.right);
+    console.log('handleResize: new right', progressBar.right);
+    // const progressBarDelta = Math.abs(progressBar.left - this.state.max);
     this.setState({
       maxPositionX: {
         left: progressBar.left,
         right: progressBar.right
       }
     })
-    console.log("what is resize button", ReactDOM.findDOMNode(this.refs.button).getBoundingClientRect());
+    // console.log('handleResize: new Left', this.state.maxPositionX.left);
+    // console.log('handleResize: new right', this.state.maxPositionX.right);
+    // console.log('handleResize: distance', progressBar.left - this.state.pos.left);
+    this.setState({
+      rel: {
+        x: progressBar.left - this.state.pos.left
+      }
+    })
+    const button = ReactDOM.findDOMNode(this.refs.button).getBoundingClientRect();
+    this.setNewPositionX(button)
+
+    // console.log("what is resize button", progressBar);
 
   }
+  shouldComponentUpdate(nextProps, nextState){
+    return (nextState.pos.x !== this.state.pos.x || nextState.maxPositionX.left !== this.state.maxPositionX.left || nextState.maxPositionX.right !== this.state.maxPositionX.right)
+  }
+  componentDidUpdate (props, state){
+    console.log('updated!!!')
+    console.log('what is props', props);
+    console.log('what is state', state);
 
-  // componentDidUpdate (props, state){
-  //   if(this.state.dragging && !state.dragging){
-  //     document.addEventListener('mousemove', this.onMouseMove)
-  //     document.addEventListener('mouseup', this.onMouseUp)
-  //     document.addEventListener('touchmove', this.onMouseMove);
-  //     document.addEventListener('touchend', this.onMouseUp);
-  //   }
-  //   else if(!this.state.dragging && state.dragging){
-  //     document.removeEventListener('mousemove', this.onMouseMove)
-  //     document.removeEventListener('mouseup', this.onMouseUp)
-  //     document.removeEventListener('touchmove', this.onMouseMove);
-  //     document.removeEventListener('touchend', this.onMouseUp);
-  //   }
-  // }
+    this.moveButton();
+    // if(this.state.dragging && !state.dragging){
+    //   document.addEventListener('mousemove', this.onMouseMove)
+    //   document.addEventListener('mouseup', this.onMouseUp)
+    //   document.addEventListener('touchmove', this.onMouseMove);
+    //   document.addEventListener('touchend', this.onMouseUp);
+    // }
+    // else if(!this.state.dragging && state.dragging){
+    //   document.removeEventListener('mousemove', this.onMouseMove)
+    //   document.removeEventListener('mouseup', this.onMouseUp)
+    //   document.removeEventListener('touchmove', this.onMouseMove);
+    //   document.removeEventListener('touchend', this.onMouseUp);
+    // }
+  }
   componentWillUnmount(){
     document.removeEventListener('mousemove', this.onMouseMove)
     document.removeEventListener('mouseup', this.onMouseUp)
@@ -164,7 +184,7 @@ class Slider extends React.Component {
         <Container ref="container">
           <Button ref="button" className="promisefin_slider__button">Test</Button>
           {/*<Progress value="45" max="100" style={{marginBottom: '5px'}} />*/}
-          <Progress ref="progress" color="isPrimary" size="isLarge" value="15" max="100" style={{marginBottom: '5px'}} />
+          <Progress ref="progress" color="isPrimary" size="isSmall" value="15" max="100" style={{marginBottom: '5px'}} />
         </Container>
 
       </div>
