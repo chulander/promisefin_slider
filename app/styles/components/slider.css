@@ -170,3 +170,8 @@ div.slider.bump {
   margin-left:38px;
 }
 
+
+.promisefin_slider__button{
+  position:absolute;
+  cursor:pointer;
+}
