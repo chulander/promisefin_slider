@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 // import LoanAmount from './LoanAmount.jsx';
 import {Progress, Button, Container} from 're-bulma';
 import SliderButton from './SliderButton';
+import SliderProgress from './SliderProgress';
 
 class Slider extends React.Component {
   constructor (props){
@@ -91,56 +92,19 @@ class Slider extends React.Component {
   // }
   //
   moveButton (target, targetPosition, targetWidth){
-    // console.log("Slider-moveButton: what is target", target);
-    // console.log("Slider-moveButton: what is targetPosition", targetPosition);
-    // targetPosition = (targetPosition <= this.state.constraints.left)
-    //   ? this.state.constraints.left
-    //   : (targetPosition >= this.state.constraints.right - targetWidth)
-    //   ? this.state.constraints.right - targetWidth
-    //   : targetPosition;
-    // console.log('setNewPositionX: what is targetPosition after', targetPosition);
-    // console.log('setNewPositionX: what is state after', this.state);
-    //console.log('setNewPositionX: what is relative', this.state.relative.x);
-    // const newPositionX = targetPosition - this.state.relative.x;
-    console.log('what is targetPosition',targetPosition);
-    const button = ReactDOM.findDOMNode(target);
-    const buttonWidth = button.getBoundingClientRect().width;
-    const buttonLeft = button.getBoundingClientRect().left;
-    console.log('what is buttonLeft', buttonLeft)
-
-
-    const constraints = this.state.constraints;
-    // let modifiedTargetPosition = targetPosition + this.state.constraints.left;
-
-    // let modifiedProgressBar = this.state.constraints.left + this.state.constraints.width;
-    // console.log('Slider-moveButton: what is modifiedTargetPosition', modifiedTargetPosition);
-    // console.log('Slider-moveButton: what is modifiedProgressBar', modifiedProgressBar);
-    // let percent = modifiedTargetPosition / modifiedProgressBar;
-    // console.log('Slider-moveButton: what is targetPosition', targetPosition);
-    // console.log('Slider-moveButton: what is constraints.left', constraints.left);
-    // console.log('Slider-moveButton: what is percent', percent);
-
-    //relative to progress bar
-    console.log('what is state constraints in parent', this.state.constraints);
-    const buttonPercent = targetPosition/ this.state.constraints.width;
-
-    // const newP = (this.state.constraints.width + this.state.constraints.left)* percent;
-    // console.log('what is newP', newP-this.state.constraints.left);
-    console.log('what is percentage', buttonPercent)
-    let newP = buttonPercent * this.state.constraints.width;
-    let newPositionX;
-    console.log('what is newP', newP-this.state.constraints.left);
-    // let newPositionX = newP *
-    // console.log('what is constraints.left', constraints.left);
-    // const newPositionX = (newP - constraints.left)<=constraints.left ? constraints.left : newP - constraints.left;
-    // console.log('what is newPositionX', newPositionX);
-    // newP = (newP <= this.state.constraints.left)
-    //   ? this.state.constraints.left
-    //   : (newP >= this.state.constraints.right - this.state.constraints.width)
-    //   ? this.state.constraints.right - this.state.constraints.width
-    //   : newP;
-    // console.log('what is newP', newP)
-    button.style.left = `${newP-this.state.constraints.left}px`
+    let relativePosition;
+    let percent;
+    if (targetPosition <= this.state.constraints.left) {
+      relativePosition = 0;
+      percent=0;
+    } else if(targetPosition >= this.state.constraints.right - targetWidth){
+      relativePosition = this.state.constraints.width - targetWidth
+      percent=100;
+    } else {
+      relativePosition = targetPosition - (this.state.constraints.right - this.state.constraints.width)
+      percent = relativePosition / this.state.constraints.width;
+    }
+    ReactDOM.findDOMNode(target).style.left = `${relativePosition}px`
   }
 
   //
@@ -158,15 +122,18 @@ class Slider extends React.Component {
   // }
 
   componentDidMount (){
-    // window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize);
     this.constructor.updateConstraint.call(this);
   }
 
   handleResize (){
+    const bar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
+    console.log('handleResize what is this progress bar ', bar)
     this.constructor.updateConstraint.call(this);
   }
 
   shouldComponentUpdate (nextProps, nextState){
+    console.log('parent shouldupdate')
     return (
       !nextState.constraints ||
       !this.state.constraints ||
@@ -214,7 +181,7 @@ class Slider extends React.Component {
         <SliderButton ref="button" {...props}>Test</SliderButton>
         {/*<Progress value="45" max="100" style={{marginBottom: '5px'}} />*/}
 
-        <Progress ref="progress" color="isPrimary" size="isLarge" value="15" max="100" style={{marginBottom: '5px'}} />
+        <SliderProgress ref="progress" {...props}></SliderProgress>>
 
       </div>
       //   <div className="slider">
@@ -245,7 +212,8 @@ Slider.defaultProps = {
   minAmount: '3000',
   maxAmount: '35000',
   defaultAmount: '15000',
-  step: '1000'
+  step: '1000',
+  percent:50
 }
 
 Slider.updateConstraint = function(){

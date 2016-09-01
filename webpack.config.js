@@ -21,7 +21,7 @@ const PUBLIC = path.join(__dirname, 'app/public');
 const TEMPLATE = path.join(__dirname, 'app/templates/index.html');
 const NODE_MODULES = path.join(__dirname, 'node_modules');
 const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 module.exports = {
   // Paths and extensions

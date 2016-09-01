@@ -14,6 +14,7 @@ class SliderButton extends React.Component {
       position: {
         x: 0
       },
+      percentage:0.0,
       relative: {
         x: 0
       }
@@ -35,15 +36,15 @@ class SliderButton extends React.Component {
   onMouseDown (e){
     // only left mouse button
     if(e.button === 0 || (e.touches && e.touches.length)){
-      const positionX = e.currentTarget.getBoundingClientRect();
-      const pageX = this.getInputPositionX(e);
-      console.log('onMouseDown: what is positionX', positionX);
-      console.log('onMouseDown: what is getInputPositionX', pageX);
+      // const positionX = e.currentTarget.getBoundingClientRect();
+      // const pageX = this.getInputPositionX(e);
+      // console.log('onMouseDown: what is positionX', positionX);
+      // console.log('onMouseDown: what is getInputPositionX', pageX);
       this.setState({
         dragging: true,
-        relative: {
-          x: pageX - positionX.left
-        }
+        // relative: {
+        //   x: pageX - positionX.left
+        // }
       })
       e.stopPropagation()
       e.preventDefault()
@@ -64,7 +65,7 @@ class SliderButton extends React.Component {
 
   setNewPositionX (positionX){
     // console.log('setNewPositionX: what is state before', this.state);
-    // console.log('setNewPositionX: what is positionX', positionX);
+    console.log('setNewPositionX: what is positionX', positionX);
 
     // positionX = (positionX <= this.props.constraints.left)
     //   ? this.props.constraints.left
@@ -73,11 +74,11 @@ class SliderButton extends React.Component {
     //   : positionX;
     // console.log('setNewPositionX: what is positionX after', positionX);
     // console.log('setNewPositionX: what is state after', this.state);
-    //console.log('setNewPositionX: what is relative', this.state.relative.x);
-    const newPositionX = positionX - this.state.relative.x;
-
+    // console.log('setNewPositionX: what is relative.x', this.state.relative.x);
+    // const newPositionX = positionX - this.state.relative.x;
+    // console.log('setNewPositionX: what is newPositionXr', newPositionX);
     this.setState({
-      current: newPositionX
+      current: positionX
     })
   }
 
