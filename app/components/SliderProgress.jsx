@@ -8,12 +8,15 @@ import {Progress} from 're-bulma';
 class SliderProgress extends React.Component {
   constructor (props){
     super(props);
+    console.log('sliderProgress props', props)
     this.state = {
       percent: props.percent
     }
   }
 
-
+  componentWillReceiveProps(nextProps){
+   console.log("should recieve props", nextProps)
+  }
   shouldComponentUpdate (nextProps, nextState){
     console.log('sliderprogress shouldupdate')
     return true

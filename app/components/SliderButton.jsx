@@ -94,12 +94,12 @@ class SliderButton extends React.Component {
   onMouseMove (e){
 
     if(this.state.dragging){
-      console.log('inside mousemove');
-      console.log('inside mousemove: what is state', this.state);
+      // console.log('inside mousemove');
+      // console.log('inside mousemove: what is state', this.state);
       const inputPosition = this.getInputPositionX(e);
-      console.log('what is inputPosition', inputPosition);
+      // console.log('what is inputPosition', inputPosition);
       this.setNewPositionX(inputPosition);
-      console.log('inside mousemove: what is post-state', this.state);
+      // console.log('inside mousemove: what is post-state', this.state);
       e.stopPropagation()
       e.preventDefault()
     }

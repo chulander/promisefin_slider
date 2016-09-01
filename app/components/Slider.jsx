@@ -13,19 +13,12 @@ class Slider extends React.Component {
       minAmount: props.minAmount,
       maxAmount: props.maxAmount,
       amount: props.defaultAmount,
-      step: props.step
+      step: props.step,
+      percent:props.percent
     }
-    // this.update = this.update.bind(this)
-    // this.onMouseMove = this.onMouseMove.bind(this)
-    // this.onMouseDown = this.onMouseDown.bind(this)
-    // this.onMouseUp = this.onMouseUp.bind(this)
     this.handleResize = this.handleResize.bind(this)
-    // this.getInputPositionX = this.getInputPositionX.bind(this)
-    // this.setNewPositionX = this.setNewPositionX.bind(this)
     this.moveButton = this.moveButton.bind(this)
-    // this.touchstart = this.touchstart.bind(this)
-    // this.touchmove = this.touchmove.bind(this)
-    // this.touchend = this.touchend.bind(this)
+
   }
 
   // update (e){
@@ -105,6 +98,11 @@ class Slider extends React.Component {
       percent = relativePosition / this.state.constraints.width;
     }
     ReactDOM.findDOMNode(target).style.left = `${relativePosition}px`
+    console.log('what is status bar', this.refs.progress);
+    this.setState({
+      percent
+    })
+
   }
 
   //
@@ -144,10 +142,11 @@ class Slider extends React.Component {
   }
 
   componentDidUpdate (props, state){
+    console.log('slider: inside componentDidUpdate')
     // console.log('what is props', props);
-    console.log('Slider: componentDidUpdate: what is state', state);
-    console.log('Slider: componentDidUpdate: what is props', props);
-    console.log('Slider: componentDidUpdate: what is this', this);
+    // console.log('Slider: componentDidUpdate: what is state', state);
+    // console.log('Slider: componentDidUpdate: what is props', props);
+    // console.log('Slider: componentDidUpdate: what is this', this);
 
     // this.moveButton();
     // if(this.state.dragging && !state.dragging){
@@ -179,9 +178,7 @@ class Slider extends React.Component {
       <div>
 
         <SliderButton ref="button" {...props}>Test</SliderButton>
-        {/*<Progress value="45" max="100" style={{marginBottom: '5px'}} />*/}
-
-        <SliderProgress ref="progress" {...props}></SliderProgress>>
+        <SliderProgress ref="progress" {...props}></SliderProgress>
 
       </div>
       //   <div className="slider">
