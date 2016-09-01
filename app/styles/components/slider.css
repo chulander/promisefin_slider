@@ -175,3 +175,7 @@ div.slider.bump {
   position:absolute;
   cursor:pointer;
 }
+
+.promisefin_slider__container{
+  top:100px;
+}
