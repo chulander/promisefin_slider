@@ -14,13 +14,20 @@ class Slider extends React.Component {
       maxAmount: props.maxAmount,
       amount: props.defaultAmount,
       step: props.step,
-      percent:props.percent
+      percent: props.percent,
     }
     this.handleResize = this.handleResize.bind(this)
-    this.moveButton = this.moveButton.bind(this)
-
+    // this.updateSliderProgressDimensions = this.constructor.updateSliderProgressDimensions.bind(this)
+    // this.updateSliderProgressValue=this.constructor.updateSliderProgressValue(this)
+    // this.moveButton = this.constructor.moveButton.bind(this)
+    // this.moveButton =
+    // this.updateButtonRelativePosition=
+    // this.updatePercent = this.updatePercent(this)
   }
 
+  // updatePercent (percent){
+  //   this.setState({percent: percent})
+  // }
   // update (e){
   //   const v = ReactDOM.findDOMNode(this.refs.loan).value;
   //
@@ -30,155 +37,54 @@ class Slider extends React.Component {
   //   })
   // }
 
-  // onMouseDown (e){
-  //   // only left mouse button
-  //   if(e.button === 0 || (e.touches && e.touches.length)){
-  //     const positionX = e.currentTarget.getBoundingClientRect();
-  //     const pageX = this.getInputPositionX(e);
-  //     console.log('onMouseDown: what is positionX', positionX);
-  //     console.log('onMouseDown: what is pageX', pageX);
-  //     this.setState(Object.assign(this.state,{
-  //       dragging: true,
-  //       relative: {
-  //         x: pageX - positionX.left
-  //       }
-  //     }))
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //   }
-  // }
-  //
-  // onMouseUp (e){
-  //   this.setState(Object.assign(this.state,{
-  //     dragging: false
-  //   }))
-  //   e.stopPropagation()
-  //   e.preventDefault()
-  // }
-  //
-  // getInputPositionX (e){
-  //   return e.pageX || e.touches[0].pageX;
-  // }
-  //
-  // setNewPositionX (positionX){
-  //   console.log('setNewPositionX: what is state before', this.state);
-  //   console.log('setNewPositionX: what is positionX', positionX);
-  //
-  //
-  //   positionX = (positionX <= this.state.position.x.constraints.left)
-  //     ? this.state.position.x.constraints.left
-  //     : (positionX >= this.state.position.x.constraints.right)
-  //     ? this.state.position.x.constraints.right
-  //     : positionX;
-  //   console.log('setNewPositionX: what is positionX after', positionX);
-  //   console.log('setNewPositionX: what is state after', this.state);
-  //   //console.log('setNewPositionX: what is relative', this.state.relative.x);
-  //   const newPositionX = positionX - this.state.relative.x;
-  //   const newStateObj = {
-  //     position: {
-  //       x:{
-  //         current: newPositionX
-  //       }
-  //     }
-  //   }
-  //   this.setState(Object.assign(this.state, newStateObj))
-  // }
-  //
-  moveButton (target, targetPosition, targetWidth){
-    let relativePosition;
-    let percent;
-    if (targetPosition <= this.state.constraints.left) {
-      relativePosition = 0;
-      percent=0;
-    } else if(targetPosition >= this.state.constraints.right - targetWidth){
-      relativePosition = this.state.constraints.width - targetWidth
-      percent=100;
-    } else {
-      relativePosition = targetPosition - (this.state.constraints.right - this.state.constraints.width)
-      percent = relativePosition / this.state.constraints.width;
-    }
-    ReactDOM.findDOMNode(target).style.left = `${relativePosition}px`
-    console.log('what is status bar', this.refs.progress);
-    this.setState({
-      percent
-    })
-
-  }
-
-  //
-  // onMouseMove (e){
-  //
-  //   if(this.state.dragging){
-  //     console.log('inside mousemove');
-  //     console.log('inside mousemove: what is state', this.state);
-  //     const inputPosition = this.getInputPositionX(e);
-  //     console.log('what is inputPosition', inputPosition);
-  //     this.setNewPositionX(inputPosition);
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //   }
-  // }
 
   componentDidMount (){
     window.addEventListener('resize', this.handleResize);
-    this.constructor.updateConstraint.call(this);
+    // this.constructor.updateSliderProgressDimensions.call(this);
   }
 
   handleResize (){
     const bar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
     console.log('handleResize what is this progress bar ', bar)
-    this.constructor.updateConstraint.call(this);
+    this.constructor.updateSliderProgressDimensions.call(this);
   }
 
-  shouldComponentUpdate (nextProps, nextState){
-    console.log('parent shouldupdate')
-    return (
-      !nextState.constraints ||
-      !this.state.constraints ||
-      nextState.constraints.width !== this.state.constraints.width ||
-      nextState.constraints.left !== this.state.constraints.left ||
-      nextState.constraints.right !== this.state.constraints.right
-    )
-  }
-
-  componentDidUpdate (props, state){
-    console.log('slider: inside componentDidUpdate')
-    // console.log('what is props', props);
-    // console.log('Slider: componentDidUpdate: what is state', state);
-    // console.log('Slider: componentDidUpdate: what is props', props);
-    // console.log('Slider: componentDidUpdate: what is this', this);
-
-    // this.moveButton();
-    // if(this.state.dragging && !state.dragging){
-    //   document.addEventListener('mousemove', this.onMouseMove)
-    //   document.addEventListener('mouseup', this.onMouseUp)
-    //   document.addEventListener('touchmove', this.onMouseMove);
-    //   document.addEventListener('touchend', this.onMouseUp);
-    // }
-    // else if(!this.state.dragging && state.dragging){
-    //   document.removeEventListener('mousemove', this.onMouseMove)
-    //   document.removeEventListener('mouseup', this.onMouseUp)
-    //   document.removeEventListener('touchmove', this.onMouseMove);
-    //   document.removeEventListener('touchend', this.onMouseUp);
-    // }
-  }
-
+  // shouldComponentUpdate (nextProps, nextState){
   //
-  // componentWillUnmount (){
-  //   document.removeEventListener('mousemove', this.onMouseMove)
-  //   document.removeEventListener('mouseup', this.onMouseUp)
-  //   document.removeEventListener('touchmove', this.onMouseMove);
-  //   document.removeEventListener('touchend', this.onMouseUp);
-  //   window.removeEventListener('resize', this.handleResize);
+  //   console.log('Slider: shouldComponentUpdate - nextProps', nextProps)
+  //   console.log('Slider: shouldComponentUpdate - nextState', nextState)
+  //   console.log('Slider: shouldComponentUpdate - this.state', this.state)
+  //   const isUpdating= (
+  //     !nextState.constraints ||
+  //     !this.state.constraints ||
+  //     (nextState.constraints.width !== this.state.constraints.width) ||
+  //     (nextState.constraints.left !== this.state.constraints.left) ||
+  //     (nextState.constraints.right !== this.state.constraints.right) ||
+  //     (nextState.percent !== this.state.percent)
+  //   )
+  //   console.log('shouldComponentUpdate: what is isUpdating', isUpdating)
+  //   return isUpdating
   // }
 
+  componentDidUpdate (prevProp, prevState){
+    console.log('Slider: componentDidUpdate', prevProp)
+    console.log('Slider: componentDidUpdate', prevState)
+  }
+
   render (){
-    const props = Object.assign({}, this.props, {moveButton: this.moveButton});
+    // const props = Object.assign({}, this.props, { percent: this.state.percent});
+    const newProps = Object.assign({}, this.props, this.state);
     return (
       <div>
+        <SliderButton {...newProps} moveButton={this.constructor.moveButton.bind(this)}
+                      updateSliderProgressValue={this.constructor.updateSliderProgressValue.bind(this)}
+                      updateButtonRelativePosition={this.constructor.updateButtonRelativePosition.bind(this)}>Test</SliderButton>
+        {/*<SliderButton {...newProps}>Test</SliderButton>*/}
+        <SliderProgress ref="progress" percent={this.state.percent}
+                        updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}
+                        updateButtonRelativePosition={this.constructor.updateButtonRelativePosition.bind(this)}
+        />
 
-        <SliderButton ref="button" {...props}>Test</SliderButton>
-        <SliderProgress ref="progress" {...props}></SliderProgress>
 
       </div>
       //   <div className="slider">
@@ -210,17 +116,118 @@ Slider.defaultProps = {
   maxAmount: '35000',
   defaultAmount: '15000',
   step: '1000',
-  percent:50
+  percent: 0.50,
+  relativePosition: 0,
+  currentPosition: 0
 }
 
-Slider.updateConstraint = function(){
-  const progressBar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
+Slider.updateSliderProgressDimensions = function (sliderProgress){
+  // console.log('step1 Slider.updateSliderProgressDimensions argument is', sliderProgress)
+  // console.log('step1a Slider.updateSliderProgressDimensions argument is', sliderProgress.state)
+  // console.log('step2 Slider.updateSliderProgressDimensions preUpdate state is', this)
+  // console.log('stepPre2 Slider.updateSliderProgressDimensions preUpdate state is', Object.keys(this))
+  // console.log('step2a Slider.updateSliderProgressDimensions preUpdate state is', this.state)
+  const progressBar = (sliderProgress)
+    ? ReactDOM.findDOMNode(sliderProgress).getBoundingClientRect()
+    : ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
+  // console.log('step3 Slider.updateSliderProgressDimensions progressBar is', progressBar)
   this.setState({
-    constraints: {
-      left: progressBar.left,
-      right: progressBar.right,
-      width: progressBar.width
-    }
+    constraintLeft: progressBar.left,
+    constraintRight: progressBar.right,
+    constraintWidth: progressBar.width
   });
+  // this.moveButton()
+  // console.log('step4 Slider.updateSliderProgressDimensions: postUpdate state', this)
 }
+
+Slider.moveButton = function (target, constraintLeft, constraintRight, constraintWidth){
+  if(!target) return;
+  console.log('what is target move button', target)
+  const {currentPosition:targetPosition, width:targetWidth} = target.state;
+  // console.log('moveButton progress state', this.refs.progress);
+  // const {constraintLeft, constraintRight, constraintWidth} = this.refs.progress.state;
+  let relativePosition;
+  let percent;
+  console.log('Slider: moveButton - What is this', this);
+  if(targetPosition <= constraintLeft){
+    relativePosition = 0;
+    percent = 0;
+  }
+  else if(targetPosition >= constraintRight - targetWidth){
+    relativePosition = constraintWidth - targetWidth
+    percent = 100;
+  }
+  else {
+    relativePosition = targetPosition - (constraintRight - constraintWidth)
+    relativePosition = Number.isNaN(relativePosition) ? 0 : relativePosition;
+    console.log('Slider: moveButton - What is constraintRight', constraintRight)
+    console.log('Slider: moveButton - What is constraintWidth', constraintWidth)
+    console.log('Slider: moveButton - What is targetPosition', targetPosition)
+    percent = relativePosition / constraintWidth;
+    percent = (Number.isNaN(percent)) ? 0 : percent;
+  }
+  console.log('Slider: moveButton - What is target', target)
+  // ReactDOM.findDOMNode(target).style= `left: ${relativePosition}px;`
+  console.log('moveButton: what is percent', percent);
+  console.log('moveButton: what is relativePosition', relativePosition);
+  target.setState({
+    percent: percent,
+    relativePosition: relativePosition
+  })
+  // console.log('moveButton: what is new  state ', this.state);
+}
+
+Slider.updateButtonRelativePosition = function (relativePosition){
+  if(!relativePosition && !this.refs.button) return;
+  console.log('inside updateButtonRelativePosition');
+  relativePosition = (!relativePosition) ? this.refs.button.state.relativePosition: relativePosition;
+  const sliderProgressWidth = this.refs.progress.state.width;
+  const newRelativePosition = sliderProgressWidth * (relativePosition / 100);
+  console.log('Slider.updateButtonRelativePosition: what is newRelativePosition', newRelativePosition);
+  console.log('what is this.refs', this.refs)
+  this.refs.button.setState({
+    relativePosition: newRelativePosition
+  })
+}
+Slider.updateSliderProgressValue = function (percent){
+  if(!percent || !this.refs || !this.refs.progress) return;
+  console.log('updateSliderProgressValue: what is progress state pre', this.refs['progress']);
+  console.log('updateSliderProgressValue what is percent', percent)
+  this.refs.progress.setState({
+    percent: percent
+  })
+}
+
+
+// Slider.moveButton = function(target){
+//     console.log('what is target move button', target)
+//     const {currentPosition:targetPosition, width:targetWidth} = target.state;
+//     const {constraintLeft, constraintRight, constraintWidth} = this.refs.progress.state;
+//     let relativePosition;
+//     let percent;
+//     console.log('Slider: moveButton - What is this', this);
+//     if (targetPosition <= constraintLeft) {
+//       relativePosition = 0;
+//       percent=0;
+//     } else if(targetPosition >= constraintRight - targetWidth){
+//       relativePosition = constraintWidth - targetWidth
+//       percent=100;
+//     } else {
+//       relativePosition = targetPosition - (constraintRight - constraintWidth)
+//       console.log('Slider: moveButton - What is constraintRight', constraintRight)
+//       console.log('Slider: moveButton - What is constraintWidth', constraintWidth)
+//       console.log('Slider: moveButton - What is targetPosition', targetPosition)
+//       percent = relativePosition / constraintWidth;
+//       percent = (Number.isNaN(percent)) ? 0 : percent;
+//     }
+//     console.log('Slider: moveButton - What is target', target)
+//     // ReactDOM.findDOMNode(target).style= `left: ${relativePosition}px;`
+//     console.log('moveButton: what is percent', percent);
+//     console.log('moveButton: what is relativePosition', relativePosition);
+//     target.setState({
+//       percent:percent,
+//       relativePosition:relativePosition
+//     })
+//     // console.log('moveButton: what is new  state ', this.state);
+// }
 export default Slider;
