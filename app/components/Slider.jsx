@@ -136,7 +136,7 @@ Slider.updateSlideButtonRelativePosition = function (target, targetPosition, tar
     percent = 0;
   }
   else if(targetPosition >= this.state.constraintRight){
-    relativePosition = this.state.constraintWidth - (targetWidth / 2)
+    relativePosition = this.state.constraintWidth
     percent = 1;
   }
   else {
