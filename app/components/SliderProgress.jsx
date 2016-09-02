@@ -17,8 +17,8 @@ class SliderProgress extends React.Component {
   }
   componentDidMount(){
     console.log('SliderProgress: componentDidMount', this)
-    this.props.updateSliderProgressDimensions(this)
-    this.props.updateButtonRelativePosition()
+    this.props.updateButtonConstraints(this)
+    // this.props.updateSliderProgressValue(this.state.percent)
   }
   // componentWillReceiveProps(nextProps){
   // // console.log("SliderProgress: should recieve props", nextProps)
@@ -27,18 +27,20 @@ class SliderProgress extends React.Component {
   //   console.log('sliderprogress shouldupdate')
   //   return true
   // }
-  componentWillUpdate(nextProps,nextState){
-    // console.log('SliderProgress componentWillUpdate: nextProps', nextProps);
-    // console.log('SliderProgress componentWillUpdate: nextState', nextState);
-  }
+  // componentWillUpdate(nextProps,nextState){
+  //   console.log('SliderProgress componentWillUpdate: nextProps', nextProps);
+  //   console.log('SliderProgress componentWillUpdate: nextState', nextState);
+  // }
   componentDidUpdate(prevProps,prevState){
-    console.log('progress inside post update');
-    ReactDOM.findDOMNode(this).value=this.state.percent*100;
+    console.log('SliderProgress.componentDidUpdate: this.state', this.state);
+    // this.props.updateSliderProgressDimensions(this)
+    // this.props.updateButtonRelativePosition(this.state.percent);
+    ReactDOM.findDOMNode(this).setAttribute('value', this.state.percent*100);
   }
   render (){
     console.log('SliderProgress: what is render props', this.props)
     return (
-        <Progress color="isPrimary" size="isLarge" value={this.props.percent * 100} max="100" style={{marginBottom: '5px'}} />
+        <Progress color="isPrimary" size="isLarge"  max="100" style={{marginBottom: '5px'}} />
     )
   }
 }
