@@ -157,17 +157,16 @@ Slider.updateSlideButtonRelativePosition = function (target, targetPosition, tar
 
 }
 Slider.convertPercentToAmount = function (percent){
-  console.log('convertPercentToAmount: percent', percent)
-  const count = (this.state.maxAmount - this.state.minAmount + 1) / 1000;
-  const unit = 100 / count; //should be about 3.333
 
-  const unRoundedTotalUnits = (percent * 100) / unit;
-  console.log('unroundedTotalUnits', unRoundedTotalUnits)
-  const totalUnits = Math.round(unRoundedTotalUnits);
-  console.log('totalUnits ', totalUnits)
-  const amount = (unRoundedTotalUnits * 1000) + 2000
+  const availableUnits = ((this.state.maxAmount - this.state.minAmount) / 1000) + 1;
+  const unit =  100/availableUnits; //should be about 3.333
+  const remainder = 100 - (availableUnits * unit);
 
-  console.log('what is amount', amount)
+  let unRoundedTotalUnits = (percent * 100) / unit;
+
+  unRoundedTotalUnits = unRoundedTotalUnits + remainder;
+  let amount = Math.round((unRoundedTotalUnits * 1000)/1000) * 1000
+  amount = amount +2000;
   return amount;
 }
 export default Slider;
