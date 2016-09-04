@@ -2,9 +2,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import LoanAmount from './LoanAmount.jsx';
-import {Progress, Button, Container} from 're-bulma';
+import {Columns, Section} from 're-bulma';
 import SliderButton from './SliderButton';
 import SliderProgress from './SliderProgress';
+import SliderCard from './SliderCard';
+
 
 class Slider extends React.Component {
   constructor (props){
@@ -78,11 +80,21 @@ class Slider extends React.Component {
   render (){
     return (
       <div>
-        <SliderButton ref="button" {...this.state}
-                      updateSlideButtonRelativePosition={this.constructor.updateSlideButtonRelativePosition.bind(this)}
-        />
-        <SliderProgress ref="progress" percent={this.state.percent}
-                        updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}></SliderProgress>
+        <Section>
+          <SliderButton ref="button" {...this.state}
+                        updateSlideButtonRelativePosition={this.constructor.updateSlideButtonRelativePosition.bind(this)}
+          />
+          <SliderProgress ref="progress" percent={this.state.percent}
+                          updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}></SliderProgress>
+        </Section>
+        <Section>
+          <Columns>
+            <SliderCard title={'Monthly Payment:'} />
+            <SliderCard title={'Fee at Origination:'} />
+            <SliderCard title={'Fixed APR:'} />
+          </Columns>
+        </Section>
+
       </div>
       //   <div className="slider">
       //     <span>{this.state.amount}</span>
@@ -112,7 +124,7 @@ Slider.defaultProps = {
   minAmount: 3000,
   maxAmount: 35000,
   amount: 15000,
-  step: '1000',
+  step: 1000,
   percent: 0.50
 }
 
@@ -158,15 +170,85 @@ Slider.updateSlideButtonRelativePosition = function (target, targetPosition, tar
 }
 Slider.convertPercentToAmount = function (percent){
 
-  const availableUnits = ((this.state.maxAmount - this.state.minAmount) / 1000) + 1;
-  const unit =  100/availableUnits; //should be about 3.333
+  const availableUnits = ((this.state.maxAmount - this.state.minAmount) / this.state.step) + 1;
+  const unit = 100 / availableUnits; //should be about 3.333
   const remainder = 100 - (availableUnits * unit);
 
   let unRoundedTotalUnits = (percent * 100) / unit;
 
   unRoundedTotalUnits = unRoundedTotalUnits + remainder;
-  let amount = Math.round((unRoundedTotalUnits * 1000)/1000) * 1000
-  amount = amount +2000;
+  let amount = Math.round((unRoundedTotalUnits * this.state.step) / this.state.step) * this.state.step
+  amount = amount + 2000;
   return amount;
 }
+
+// var setup_loan_size_slider = function () {
+//   window.$('#slider').slider({
+//     value: 3000,
+//     range: 'min',
+//     orientation: 'horizontal',
+//     min: 3000,
+//     max: 35000,
+//     step: 100,
+//     create: function ( /*event, ui*/ ) {
+//       window.$('.ui-slider-handle').append('<div id="sliderValue">$3,000</div>');
+//       var val = 3000;
+//       var timer = setInterval(function () {
+//         if (val <= 15000) {
+//           window.$('#slider').slider('value', val);
+//           window.$('#sliderValue').html('$' + val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+//           val += 100;
+//         }
+//         else {
+//           clearInterval(timer);
+//           window.$('#slider').slider('option', 'step', 1000);
+//         }
+//       }, 6);
+//
+//       ratesCalculation(15000);
+//     },
+//     slide: function (event, ui) {
+//       window.$('#sliderValue').html('$' + ui.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
+//
+//       ratesCalculation(ui.value);
+//     }
+//   });
+// };
+var rateCalculationNominator = function (interestRate, loanAmount) {
+  return ((interestRate / 12) * loanAmount);
+};
+var rateCalculationDenominator = function (interestRate) {
+  var exp = Math.pow((1 + (interestRate / 12)), -36);
+  return (1 - exp);
+};
+const ratesCalculation = function ratesCalculation(loanAmount) {
+  const getKeyLoanApplication = function (loanAmount) {
+    const keyLoanApplication = {
+      interest_rate_low: 0.0631,
+      interest_rate_high: 0.2666,
+      origination_fee_low: 0.01,
+    }
+    if (loanAmount <= 6000) {
+      return Object.assign(keyLoanApplication, {
+        origination_fee_high: 0.06
+      })
+    }
+    if (loanAmount >= 7000) {
+      return Object.assign(keyLoanApplication, {
+        origination_fee_high: 0.05
+      })
+    }
+  };
+  let keyLoanApplication = getKeyLoanApplication(loanAmount);
+
+  interestRateLow.innerHTML = numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_low, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_low))).format('0,0[.]00');
+  interestRateHigh.innerHTML = `${numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_high, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_high))).format('0,0[.]00')}<sup>&#x2020;</sup>`;
+  originationFeeLow.innerHTML = numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_low)).format('0,0[.]00');
+  originationFeeHigh.innerHTML = `${numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_high)).format('0,0[.]00')}<sup>&#x2020;</sup>`;
+
+  requested_loan_amount.value = loanAmount;
+};
+
+
+
 export default Slider;

@@ -40,6 +40,7 @@ class SliderProgress extends React.Component {
   componentWillReceiveProps(nextProps) {
     // console.log('SliderProgress.componentWillReceiveProps nextProps', nextProps)
     this.setState(nextProps)
+    ReactDOM.findDOMNode(this).setAttribute('value', nextProps.percent * 100);
   }
   componentDidUpdate (prevProps, prevState){
     // console.log('SliderProgress.componentDidUpdate prevProps', prevProps);
@@ -50,7 +51,7 @@ class SliderProgress extends React.Component {
 
   render (){
     return (
-        <Progress color="isPrimary" value={this.props.percent * 100}size="isLarge"  max="100" style={{marginBottom: '5px'}} />
+        <Progress color="isPrimary" size="isLarge"  max="100" style={{marginBottom: '5px'}} />
 
 
     )

@@ -172,10 +172,35 @@ div.slider.bump {
 
 
 .promisefin_slider__button{
-  position:absolute;
+  /*position:absolute;*/
   cursor:pointer;
+  /*left: -60px;*/
+  /*bottom: -23px;*/
+  background: #fdfdfd;
+  border: 1px solid #ccc;
+  width: 141px;
+  border-radius: .5rem;
+  line-height: 3.5rem;
+  text-align: center;
+  color: #333;
+  font-weight: 700;
+  font-size: 1.3rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .promisefin_slider__container{
   top:100px;
+}
+
+
+.promisefin_card {
+  border: 1px dotted #ccc;
+  -webkit-border-top-right-radius: 1.5rem;
+  -webkit-border-bottom-left-radius: 1.5rem;
+  -moz-border-radius-topright: 1.5rem;
+  -moz-border-radius-bottomleft: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+  padding: 2rem;
+  background: #fdfdfd;
 }
