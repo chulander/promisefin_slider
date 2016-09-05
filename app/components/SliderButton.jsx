@@ -232,6 +232,7 @@ class SliderButton extends React.Component {
                  onTouchEnd={this.onMouseUp}
       >
         <div>{this.props.amount}</div>
+        <div>{this.props.position}</div>
       </Container>
 
 
