@@ -26,3 +26,9 @@ a:hover {
   border-bottom: 1px solid steelblue;
   cursor: pointer;
 }
+
+.promisefin_checkrate_container{
+  max-width:47rem;
+  top:100px;
+  padding:0 4%;
+}

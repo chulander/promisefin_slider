@@ -1,4 +1,5 @@
 @import 'normalize.css';
 @import 'styles/base/elements';
-@import 'styles/components/world';
 @import 'styles/components/slider';
+@import 'styles/components/restrictions';
+@import 'styles/components/rates';

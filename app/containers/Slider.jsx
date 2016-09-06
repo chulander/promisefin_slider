@@ -1,11 +1,11 @@
 "use strict";
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import LoanAmount from './LoanAmount.jsx';
-import {Columns, Section} from 're-bulma';
+import {Section, Columns, Container} from 're-bulma';
 import SliderButton from '../components/SliderButton';
 import SliderProgress from '../components/SliderProgress';
-
+import SliderAmountLimits from '../components/SliderAmountLimits';
+import numeral from 'numeral';
 class Slider extends React.Component {
 
   constructor (props){
@@ -30,9 +30,7 @@ class Slider extends React.Component {
     this.getInputPositionX = this.getInputPositionX.bind(this)
     this.setPosition = this.setPosition.bind(this)
 
-
   }
-
   mouseDown (e){
     // only left mouse button
     if(e.button === 0 || (e.touches && e.touches.length)){
@@ -68,6 +66,7 @@ class Slider extends React.Component {
     // console.log('what is e', e)
 
     if(this.state.dragging){
+      console.log('Slider.onMouseMove')
       const inputPosition = this.getInputPositionX(e);
       this.setPosition(inputPosition);
       e.stopPropagation()
@@ -143,23 +142,35 @@ class Slider extends React.Component {
     console.log('Slider.render: what is this.props', this.props)
     return (
 
-      <Section onMouseMove={this.onMouseMove}
-               onMouseLeave={this.mouseUp}
-               onTouchMove={this.onMouseMove}
-               onTouchCancel={this.mouseUp}
-               onTouchEnd={this.mouseUp}
-               onMouseDown={this.mouseClick}
+      <Container
+        onMouseMove={this.onMouseMove}
+        onMouseLeave={this.mouseUp}
+        onTouchMove={this.onMouseMove}
+        onTouchCancel={this.mouseUp}
+        onTouchEnd={this.mouseUp}
+        onMouseDown={this.mouseClick}
       >
-        <SliderButton ref="button" {...this.state}
-                      updateSlideButtonRelativePosition={this.constructor.updateSlideButtonRelativePosition.bind(this)}
-                      convertPercentToAmount={this.constructor.convertPercentToAmount.bind(this)}
-                      updateAmount={this.props.updateAmount}
-                      mouseDown={this.mouseDown}
-                      mouseUp={this.mouseUp}
+        <SliderButton
+          ref="button" {...this.state}
+          updateSlideButtonRelativePosition={this.constructor.updateSlideButtonRelativePosition.bind(this)}
+          convertPercentToAmount={this.constructor.convertPercentToAmount.bind(this)}
+          formatAmount={this.props.formatAmount}
+          updateAmount={this.props.updateAmount}
+          mouseDown={this.mouseDown}
+          mouseUp={this.mouseUp}
         />
-        <SliderProgress ref="progress" percent={this.state.percent}
-                        updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}></SliderProgress>
-      </Section>
+
+        <SliderProgress
+          ref="progress" percent={this.state.percent}
+          updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}
+        />
+        <br/>
+        <SliderAmountLimits
+          formatAmount={this.props.formatAmount}
+          minAmount={this.state.minAmount}
+          maxAmount={this.state.maxAmount}
+        />
+      </Container>
 
     )
   }
@@ -204,7 +215,7 @@ Slider.updateSlideButtonRelativePosition = function (target, targetPosition, tar
     relativePosition = targetPosition - (this.state.constraintRight - this.state.constraintWidth)
     percent = relativePosition / this.state.constraintWidth;
   }
-  const amount = this.constructor.convertPercentToAmount.call(this,percent);
+  const amount = this.constructor.convertPercentToAmount.call(this, percent);
   this.props.updateAmount(amount)
   this.setState({
     relativePosition: relativePosition,
