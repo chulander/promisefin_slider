@@ -10,15 +10,15 @@ class SliderCard extends React.Component {
     super(props);
     // console.log('sliderProgress props', props)
     this.state={
-      type:props.type,
-      low:props.low,
-      high:props.high
+      minAmount:props.minAmount,
+      maxAmount:props.maxAmount
     }
   }
 
-  // componentWillReceiveProps(nextProps){
-  //  console.log("should recieve props", nextProps)
-  // }
+  componentWillReceiveProps(nextProps){
+   console.log("should recieve props", nextProps)
+    this.setState(nextProps)
+  }
   // shouldComponentUpdate (nextProps, nextState){
   //   console.log('sliderprogress shouldupdate')
   //   return true
@@ -56,7 +56,7 @@ class SliderCard extends React.Component {
     return (
       <Column style={{textAlign:'center'}} className="promisefin_card">
           <Title size={'is4'}>{this.props.title}</Title>
-          <Subtitle size={'is4'}>400-500</Subtitle>
+          <Subtitle size={'is4'}>{this.state.minAmount} - {this.state.maxAmount}</Subtitle>
 
       </Column>
     )

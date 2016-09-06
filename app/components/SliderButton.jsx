@@ -5,10 +5,10 @@ import {Button, Container} from 're-bulma';
 // import Immutable from 'immutable';
 // import SliderButton from './SliderButton';
 
-
+import numeral from 'numeral';
 class SliderButton extends React.Component {
   constructor (props){
-    console.log('SliderButton.constructor: props', props);
+
     super(props);
     this.state = {
       dragging: false,
@@ -22,12 +22,12 @@ class SliderButton extends React.Component {
     // this.onMouseMove = this.onMouseMove.call(this, this.onMouseMove, 250)
 
 
-    this.onMouseDown = this.onMouseDown.bind(this)
-    this.onMouseUp = this.onMouseUp.bind(this)
+    // this.onMouseDown = this.onMouseDown.bind(this)
+    // this.onMouseUp = this.onMouseUp.bind(this)
     // this.handleResize = this.handleResize.bind(this)
-    this.getInputPositionX = this.getInputPositionX.bind(this)
-    this.setPosition = this.setPosition.bind(this)
-    this.onMouseMove = this.onMouseMove.bind(this)
+    // this.getInputPositionX = this.getInputPositionX.bind(this)
+    // this.setPosition = this.setPosition.bind(this)
+    // this.onMouseMove = this.onMouseMove.bind(this)
     // this.onMouseMove = this.deBounce.bind(this)(this.onMouseMove.bind(this),50)
     //this.deBounce = this.deBounce.bind(this)
 
@@ -37,77 +37,77 @@ class SliderButton extends React.Component {
     // this.touchend = this.touchend.bind(this)
   }
 
-  onMouseDown (e){
-    // only left mouse button
-    console.log('inside mouseDown')
-    if(e.button === 0 || (e.touches && e.touches.length)){
-      // const inputPosition = e.currentTarget.getBoundingClientRect();
-      // const pageX = this.getInputPositionX(e);
-      // console.log('onMouseDown: what is inputPosition', inputPosition);
-      // console.log('onMouseDown: what is getInputPositionX', pageX);
-      this.setState({
-        dragging: true,
-        // relative: {
-        //   x: pageX - inputPosition.left
-        // }
-      })
-      e.stopPropagation()
-      e.preventDefault()
-    }
-  }
+  // onMouseDown (e){
+  //   // only left mouse button
+  //   console.log('inside mouseDown')
+  //   if(e.button === 0 || (e.touches && e.touches.length)){
+  //     // const inputPosition = e.currentTarget.getBoundingClientRect();
+  //     // const pageX = this.getInputPositionX(e);
+  //     // console.log('onMouseDown: what is inputPosition', inputPosition);
+  //     // console.log('onMouseDown: what is getInputPositionX', pageX);
+  //     this.setState({
+  //       dragging: true,
+  //       // relative: {
+  //       //   x: pageX - inputPosition.left
+  //       // }
+  //     })
+  //     e.stopPropagation()
+  //     e.preventDefault()
+  //   }
+  // }
+  //
+  // onMouseUp (e){
+  //   this.setState({
+  //     dragging: false
+  //   })
+  //   e.stopPropagation()
+  //   e.preventDefault()
+  // }
+  //
+  // getInputPositionX (e){
+  //   return e.pageX || e.touches[0].pageX;
+  // }
+  //
+  // setPosition (inputPosition){
+  //   // console.log('setPosition: what is state before', this.state);
+  //   console.log('setPosition: what is inputPosition', inputPosition);
+  //   this.setState({
+  //     position: inputPosition
+  //   })
+  // }
 
-  onMouseUp (e){
-    this.setState({
-      dragging: false
-    })
-    e.stopPropagation()
-    e.preventDefault()
-  }
+  // onMouseMove (e){
+  //
+  //   console.log('insideMouseMove')
+  //   // console.log('what is e', e)
+  //   if(this.state.dragging){
+  //     //e.persist()
+  //
+  //     // console.log('inside mousemove');
+  //     // console.log('inside mousemove: what is state', this.state);
+  //     const inputPosition = this.getInputPositionX(e);
+  //     // console.log('what is inputPosition', inputPosition);
+  //     this.setPosition(inputPosition);
+  //     // console.log('inside mousemove: what is post-state', this.state);
+  //     e.stopPropagation()
+  //     e.preventDefault()
+  //   }
+  // }
 
-  getInputPositionX (e){
-    return e.pageX || e.touches[0].pageX;
-  }
-
-  setPosition (inputPosition){
-    // console.log('setPosition: what is state before', this.state);
-    console.log('setPosition: what is inputPosition', inputPosition);
-    this.setState({
-      position: inputPosition
-    })
-  }
-
-  deBounce (func, wait){
-    console.log('insidedeBounce')
-    let timeout;
-    return ()=>{
-      console.log('what is func', func)
-      console.log('what is wait', wait)
-      clearTimeout(timeout);
-      timeout = setTimeout(function(){
-        timeout = null;
-        func.call()
-      }, wait);
-
-    };
-  }
-
-  onMouseMove (e){
-
-    console.log('insideMouseMove')
-    // console.log('what is e', e)
-    if(this.state.dragging){
-      //e.persist()
-
-      // console.log('inside mousemove');
-      // console.log('inside mousemove: what is state', this.state);
-      const inputPosition = this.getInputPositionX(e);
-      // console.log('what is inputPosition', inputPosition);
-      this.setPosition(inputPosition);
-      // console.log('inside mousemove: what is post-state', this.state);
-      e.stopPropagation()
-      e.preventDefault()
-    }
-  }
+  // deBounce (func, wait){
+  //   console.log('insidedeBounce')
+  //   let timeout;
+  //   return ()=>{
+  //     console.log('what is func', func)
+  //     console.log('what is wait', wait)
+  //     clearTimeout(timeout);
+  //     timeout = setTimeout(function(){
+  //       timeout = null;
+  //       func.call()
+  //     }, wait);
+  //
+  //   };
+  // }
 
   componentDidMount (){
     console.log('SliderButton.componentDidMount', this)
@@ -163,10 +163,10 @@ class SliderButton extends React.Component {
   // }
 
   shouldComponentUpdate (nextProps, nextState){
-    // console.log('SliderButton.shouldComponentUpdate nextProps', nextProps);
-    // console.log('SliderButton.shouldComponentUpdate this.props', this.props);
-    // console.log('SliderButton.shouldComponentUpdate nextState', nextState);
-    // console.log('SliderButton.shouldComponentUpdate this.state', this.state);
+    console.log('SliderButton.shouldComponentUpdate nextProps', nextProps);
+    console.log('SliderButton.shouldComponentUpdate this.props', this.props);
+    console.log('SliderButton.shouldComponentUpdate nextState', nextState);
+    console.log('SliderButton.shouldComponentUpdate this.state', this.state);
     const test = (
       nextState.percent !== this.state.percent ||
       nextState.relativePosition !== this.state.relativePosition ||
@@ -174,33 +174,25 @@ class SliderButton extends React.Component {
       nextState.width !== this.state.width ||
       nextState.height !== this.state.height
     )
-    // console.log('SliderButton.shouldComponentUpdate', test);
+    console.log('SliderButton.shouldComponentUpdate', test);
     return test;
   }
 
   componentWillReceiveProps (nextProps){
-    // console.log('SliderButton.componentWillReceiveProps nextProps', nextProps)
+    console.log('SliderButton.componentWillReceiveProps nextProps', nextProps)
     this.setState(nextProps)
 
   }
 
   componentDidUpdate (prevProps, prevState){
-    // console.log('SliderButton.componentDidUpdate prevProps', prevProps);
-    // console.log('SliderButton.componentDidUpdate this.props', this.props);
-    // console.log('SliderButton.componentDidUpdate prevState', prevState);
-    // console.log('SliderButton.componentDidUpdate this.state', this.state);
+    console.log('SliderButton.componentDidUpdate prevProps', prevProps);
+    console.log('SliderButton.componentDidUpdate this.props', this.props);
+    console.log('SliderButton.componentDidUpdate prevState', prevState);
+    console.log('SliderButton.componentDidUpdate this.state', this.state);
     // if(nextProps.relativePosition){
     //   console.log('what is nextProps.relativePosition', nextProps.relativePosition);
 
     ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.width / 2)}px; top:${this.state.height*(2/3)}px;`
-
-    // }
-    // console.log('what is props', props);
-    // console.log('componentDidUpdate: what is state', state);
-
-    // console.log('SliderButton: componentDidUpdate: what is state', state);
-    // console.log('SliderButton: componentDidUpdate: what is props', props);
-    // console.log('SliderButton: componentDidUpdate: what is this', this);
 
     this.props.updateSlideButtonRelativePosition(this, this.state.position, this.state.width);
 
@@ -218,21 +210,20 @@ class SliderButton extends React.Component {
   render (){
     // console.log('what is this.props', this.props);
     //{/*<Button ref="button" className={this.props.className}>{this.props.amount}</Button>*/}
-    console.log('SliderButton.render: this.props', this.props);
+    // console.log('SliderButton.render: this.props', this.props);
     // document.addEventListener('mousemove', this.onMouseMove);
+    console.log('SliderButton.render: props', this.props);
     return (
       <Container ref="button"
                  hasTextCentered={true}
                  className={this.props.className}
-                 onMouseDown={this.onMouseDown}
-                 onTouchStart={this.onMouseDown}
-                 onMouseMove={this.onMouseMove}
-                onTouchMove={this.onMouseMove}
-                 onMouseUp={this.onMouseUp}
-                 onTouchEnd={this.onMouseUp}
+                 onMouseDown={this.props.mouseDown}
+                 onTouchStart={this.props.mouseDown}
+
+                 onMouseUp={this.props.mouseUp}
+                 onTouchEnd={this.props.mouseUp}
       >
-        <div>{this.props.amount}</div>
-        <div>{this.props.position}</div>
+        <div>{numeral(this.props.amount).format('0,0[.]00')}</div>
       </Container>
 
 
