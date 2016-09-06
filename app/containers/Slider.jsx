@@ -36,15 +36,8 @@ class Slider extends React.Component {
   mouseDown (e){
     // only left mouse button
     if(e.button === 0 || (e.touches && e.touches.length)){
-      // const inputPosition = e.currentTarget.getBoundingClientRect();
-      // const pageX = this.getInputPositionX(e);
-      // console.log('mouseDown: what is inputPosition', inputPosition);
-      // console.log('mouseDown: what is getInputPositionX', pageX);
       this.setState({
         dragging: true,
-        // relative: {
-        //   x: pageX - inputPosition.left
-        // }
       })
       e.stopPropagation()
       e.preventDefault()
@@ -75,14 +68,8 @@ class Slider extends React.Component {
     // console.log('what is e', e)
 
     if(this.state.dragging){
-      //e.persist()
-
-      // console.log('inside mousemove');
-      // console.log('inside mousemove: what is state', this.state);
       const inputPosition = this.getInputPositionX(e);
-      // console.log('what is inputPosition', inputPosition);
       this.setPosition(inputPosition);
-      // console.log('inside mousemove: what is post-state', this.state);
       e.stopPropagation()
       e.preventDefault()
     }
@@ -90,9 +77,7 @@ class Slider extends React.Component {
 
   mouseClick (e){
     const inputPosition = this.getInputPositionX(e);
-    // console.log('what is inputPosition', inputPosition);
     this.setPosition(inputPosition);
-    // console.log('inside mousemove: what is post-state', this.state);
     e.stopPropagation()
     e.preventDefault()
   }
@@ -101,8 +86,6 @@ class Slider extends React.Component {
     console.log('insidedeBounce')
     let timeout;
     return ()=>{
-      console.log('what is func', func)
-      console.log('what is wait', wait)
       clearTimeout(timeout);
       timeout = setTimeout(function (){
         timeout = null;
@@ -111,15 +94,6 @@ class Slider extends React.Component {
 
     };
   }
-
-  // update (e){
-  //   const v = ReactDOM.findDOMNode(this.refs.loan).value;
-  //
-  //   console.log('what is the loan value', v);
-  //   this.setState({
-  //     amount: ReactDOM.findDOMNode(this.refs.loan).value
-  //   })
-  // }
 
 
   componentDidMount (){
@@ -215,46 +189,33 @@ Slider.updateSlideButtonRelativePosition = function (target, targetPosition, tar
   let relativePosition;
   let percent;
   if(!targetPosition){
-    console.log('Slider.updateSliderButtonRelativePosition 1')
     percent = this.constructor.convertAmountToPercent.call(this, this.state.amount)
     relativePosition = this.state.constraintWidth * percent;
   }
   else if(targetPosition <= this.state.constraintLeft){
-    console.log('Slider.updateSliderButtonRelativePosition 2')
     relativePosition = 0;
     percent = 0;
   }
   else if(targetPosition >= this.state.constraintRight){
-    console.log('Slider.updateSliderButtonRelativePosition 3')
     relativePosition = this.state.constraintWidth
     percent = 1;
   }
   else {
-    console.log("targetWidth is ", targetWidth)
-    console.log('Slider.updateSliderButtonRelativePosition 4')
     relativePosition = targetPosition - (this.state.constraintRight - this.state.constraintWidth)
     percent = relativePosition / this.state.constraintWidth;
   }
   const amount = this.constructor.convertPercentToAmount.call(this,percent);
-  console.log('what is amount', amount)
   this.props.updateAmount(amount)
   this.setState({
     relativePosition: relativePosition,
-    // amount: this.constructor.convertPercentToAmount.call(this,percent)),
     percent: percent
   })
 
 }
 Slider.convertAmountToPercent = function (amount){
   const totalUnits = ((this.state.maxAmount - this.state.minAmount) / this.state.step) + 1;
-  console.log('what is totalUnits', totalUnits)
-  // const availableUnits = ((this.state.maxAmount - this.state.minAmount) / this.state.step) + 1;
   const amountUnitUsage = totalUnits - ((this.state.maxAmount - amount) / this.state.step);
-
-  console.log('what is availableunits', amountUnitUsage)
   const percent = amountUnitUsage / totalUnits
-
-
   return percent;
 
 }
@@ -277,73 +238,6 @@ Slider.convertPercentToAmount = function (percent){
   }
   return amount;
 }
-
-// var setup_loan_size_slider = function () {
-//   window.$('#slider').slider({
-//     value: 3000,
-//     range: 'min',
-//     orientation: 'horizontal',
-//     min: 3000,
-//     max: 35000,
-//     step: 100,
-//     create: function ( /*event, ui*/ ) {
-//       window.$('.ui-slider-handle').append('<div id="sliderValue">$3,000</div>');
-//       var val = 3000;
-//       var timer = setInterval(function () {
-//         if (val <= 15000) {
-//           window.$('#slider').slider('value', val);
-//           window.$('#sliderValue').html('$' + val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-//           val += 100;
-//         }
-//         else {
-//           clearInterval(timer);
-//           window.$('#slider').slider('option', 'step', 1000);
-//         }
-//       }, 6);
-//
-//       ratesCalculation(15000);
-//     },
-//     slide: function (event, ui) {
-//       window.$('#sliderValue').html('$' + ui.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-//
-//       ratesCalculation(ui.value);
-//     }
-//   });
-// };
-var rateCalculationNominator = function (interestRate, loanAmount){
-  return ((interestRate / 12) * loanAmount);
-};
-var rateCalculationDenominator = function (interestRate){
-  var exp = Math.pow((1 + (interestRate / 12)), -36);
-  return (1 - exp);
-};
-const ratesCalculation = function ratesCalculation (loanAmount){
-  const getKeyLoanApplication = function (loanAmount){
-    const keyLoanApplication = {
-      interest_rate_low: 0.0631,
-      interest_rate_high: 0.2666,
-      origination_fee_low: 0.01,
-    }
-    if(loanAmount <= 6000){
-      return Object.assign(keyLoanApplication, {
-        origination_fee_high: 0.06
-      })
-    }
-    if(loanAmount >= 7000){
-      return Object.assign(keyLoanApplication, {
-        origination_fee_high: 0.05
-      })
-    }
-  };
-  let keyLoanApplication = getKeyLoanApplication(loanAmount);
-
-  interestRateLow.innerHTML = numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_low, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_low))).format('0,0[.]00');
-  interestRateHigh.innerHTML = `${numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_high, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_high))).format('0,0[.]00')}<sup>&#x2020;</sup>`;
-  originationFeeLow.innerHTML = numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_low)).format('0,0[.]00');
-  originationFeeHigh.innerHTML = `${numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_high)).format('0,0[.]00')}<sup>&#x2020;</sup>`;
-
-  requested_loan_amount.value = loanAmount;
-};
 
 
 export default Slider;

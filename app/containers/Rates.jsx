@@ -1,10 +1,9 @@
 "use strict";
 import React from 'react';
-import ReactDOM from 'react-dom';
-// import LoanAmount from './LoanAmount.jsx';
-import {Columns, Section} from 're-bulma';
-import RatesCard from '../components/RatesCard';
+import {Columns} from 're-bulma';
+import RateCard from '../components/RateCard';
 import numeral from 'numeral';
+
 class Rates extends React.Component {
   constructor (props){
     super(props);
@@ -17,8 +16,6 @@ class Rates extends React.Component {
     this.calculateMonthlyPayments = this.calculateMonthlyPayments.bind(this)
     this.calculateOriginationFees = this.calculateOriginationFees.bind(this)
   }
-
-
 
   calculateMonthlyPayments (amount){
     const _monthlyPaymentsNumerator = (interestRate, loanAmount)=>(interestRate / 12) * loanAmount;
@@ -53,29 +50,6 @@ class Rates extends React.Component {
     }
   }
 
-
-  // update (e){
-  //   const v = ReactDOM.findDOMNode(this.refs.loan).value;
-  //
-  //   console.log('what is the loan value', v);
-  //   this.setState({
-  //     amount: ReactDOM.findDOMNode(this.refs.loan).value
-  //   })
-  // }
-
-
-  componentDidMount (){
-    // window.addEventListener('resize', this.handleResize);
-    // console.log('Rates.componentDidMount this.props', this.props)
-    // console.log('Rates.componentDidMount this.state', this.state)
-  }
-
-  handleResize (){
-    // const bar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
-    // console.log('handleResize what is this progress bar ', bar)
-    // this.constructor.updateRatesProgressDimensions.call(this);
-  }
-
   shouldComponentUpdate (nextProps, nextState){
     console.log('Rates.shouldComponentUpdate nextProps', nextProps)
     console.log('Rates.shouldComponentUpdate this.props', this.props)
@@ -106,111 +80,37 @@ class Rates extends React.Component {
 
 
   render (){
-    // console.log('what is props inside rates', this.props);
-    // console.log('what is state inside rates', this.state)
     const {minMonthlyPayment, maxMonthlyPayment} = this.calculateMonthlyPayments(this.state.amount)
     const {minOriginationFee, maxOriginationFee} = this.calculateOriginationFees(this.state.amount)
 
-    console.log('what is minMonthlyPayment', minMonthlyPayment)
-    console.log('what is maxMonthlyPayment', maxMonthlyPayment)
     return (
 
       <Columns>
-        <RatesCard
+        <RateCard
           id={'payments'}
           title={'Monthly Payment:'}
           minAmount={minMonthlyPayment}
           maxAmount={maxMonthlyPayment}
           symbol={'<sup>&#x2020;</sup>'}
         />
-        <RatesCard
+        <RateCard
           id={'fees'}
           title={'Fee at Origination:'}
           minAmount={minOriginationFee}
           maxAmount={maxOriginationFee}
           symbol={'<sup>&#x2020;</sup>'}
         />
-        <RatesCard
+        <RateCard
           id={'fixedApr'}
           title={'Fixed APR:'}
           minAmount={'6.99%'}
           maxAmount={'29.99%'}
           symbol={'*'}
         />
-
       </Columns>
-
-
-
-      //   <div className="slider">
-      //     <span>{this.state.amount}</span>
-      //     <hr />
-      //
-      //     <br />
-      //     <span>{this.state.minAmount}</span>
-      //     {/*<LoanAmount minAmount={this.minAmount} maxAmount={this.maxAmount} value={this.amount} step={this.step} update={this.update}/>*/}
-      //     <input
-      //       type="range"
-      //       ref="loan"
-      //       min={this.state.minAmount}
-      //       max={this.state.maxAmount}
-      //       value={this.state.amount}
-      //       step={this.state.step}
-      //       onChange={this.update}
-      //     />
-      //     <span>{this.state.maxAmount}</span>
-      //   </div>
     )
   }
 }
-//
-
-
-// var setup_loan_size_slider = function () {
-//   window.$('#slider').slider({
-//     value: 3000,
-//     range: 'min',
-//     orientation: 'horizontal',
-//     min: 3000,
-//     max: 35000,
-//     step: 100,
-//     create: function ( /*event, ui*/ ) {
-//       window.$('.ui-slider-handle').append('<div id="sliderValue">$3,000</div>');
-//       var val = 3000;
-//       var timer = setInterval(function () {
-//         if (val <= 15000) {
-//           window.$('#slider').slider('value', val);
-//           window.$('#sliderValue').html('$' + val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-//           val += 100;
-//         }
-//         else {
-//           clearInterval(timer);
-//           window.$('#slider').slider('option', 'step', 1000);
-//         }
-//       }, 6);
-//
-//       ratesCalculation(15000);
-//     },
-//     slide: function (event, ui) {
-//       window.$('#sliderValue').html('$' + ui.value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
-//
-//       ratesCalculation(ui.value);
-//     }
-//   });
-// };
-
-
-// const ratesCalculation = function ratesCalculation (loanAmount){
-//
-//   let keyLoanApplication = getKeyLoanApplication(loanAmount);
-//
-//   interestRateLow.innerHTML = numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_low, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_low))).format('0,0[.]00');
-//   interestRateHigh.innerHTML = `${numeral(Math.round(rateCalculationNominator(keyLoanApplication.interest_rate_high, loanAmount) / rateCalculationDenominator(keyLoanApplication.interest_rate_high))).format('0,0[.]00')}<sup>&#x2020;</sup>`;
-//   originationFeeLow.innerHTML = numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_low)).format('0,0[.]00');
-//   originationFeeHigh.innerHTML = `${numeral(Math.floor(loanAmount * keyLoanApplication.origination_fee_high)).format('0,0[.]00')}<sup>&#x2020;</sup>`;
-//
-//   requested_loan_amount.value = loanAmount;
-// };
 
 Rates.defaultProps = {
   minInterestRate: 0.0631,
