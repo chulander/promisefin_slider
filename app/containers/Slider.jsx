@@ -163,7 +163,6 @@ class Slider extends React.Component {
           ref="progress" percent={this.state.percent}
           updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}
         />
-        <br/>
         <SliderAmountLimits
           formatAmount={this.props.formatAmount}
           minAmount={this.state.minAmount}

@@ -131,8 +131,3 @@ class SliderButton extends React.Component {
 }
 
 export default SliderButton;
-/*
-<LevelLeft><LevelItem><div className={"arrow-left"}/></LevelItem></LevelLeft>
-<LevelItem hasTextCentered={true} className={'promisefin_slider__button__amount'}><div>${this.formatAmount(this.state.amount)}</div></LevelItem>
-  <LevelRight><LevelItem><div className={"arrow-right"}></div></LevelItem></LevelRight>
-*/
