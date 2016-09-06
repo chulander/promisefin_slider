@@ -42,7 +42,7 @@ class SliderProgress extends React.Component {
 
   render (){
     return (
-        <Progress color="isPrimary" value={this.props.percent *100} size="isLarge"  max="100" style={{marginBottom: '5px'}} />
+        <Progress color="isPrimary" value={this.props.percent *100} size="isMedium"  max="100" style={{marginBottom: '5px'}} />
     )
   }
 }

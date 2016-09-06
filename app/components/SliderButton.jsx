@@ -1,14 +1,11 @@
 "use strict";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Container} from 're-bulma';
-// import Immutable from 'immutable';
-// import SliderButton from './SliderButton';
+import {Button, Container, Columns, Column, Level, LevelLeft, LevelRight, LevelItem} from 're-bulma';
 
-import numeral from 'numeral';
+
 class SliderButton extends React.Component {
   constructor (props){
-
     super(props);
     this.state = {
       dragging: false,
@@ -18,96 +15,8 @@ class SliderButton extends React.Component {
       amount: props.amount
 
     }
-    // this.update = this.update.bind(this)
-    // this.onMouseMove = this.onMouseMove.call(this, this.onMouseMove, 250)
-
-
-    // this.onMouseDown = this.onMouseDown.bind(this)
-    // this.onMouseUp = this.onMouseUp.bind(this)
-    // this.handleResize = this.handleResize.bind(this)
-    // this.getInputPositionX = this.getInputPositionX.bind(this)
-    // this.setPosition = this.setPosition.bind(this)
-    // this.onMouseMove = this.onMouseMove.bind(this)
-    // this.onMouseMove = this.deBounce.bind(this)(this.onMouseMove.bind(this),50)
-    //this.deBounce = this.deBounce.bind(this)
-
-
-    // this.touchstart = this.touchstart.bind(this)
-    // this.touchmove = this.touchmove.bind(this)
-    // this.touchend = this.touchend.bind(this)
+    this.formatAmount = props.formatAmount.bind(this)
   }
-
-  // onMouseDown (e){
-  //   // only left mouse button
-  //   console.log('inside mouseDown')
-  //   if(e.button === 0 || (e.touches && e.touches.length)){
-  //     // const inputPosition = e.currentTarget.getBoundingClientRect();
-  //     // const pageX = this.getInputPositionX(e);
-  //     // console.log('onMouseDown: what is inputPosition', inputPosition);
-  //     // console.log('onMouseDown: what is getInputPositionX', pageX);
-  //     this.setState({
-  //       dragging: true,
-  //       // relative: {
-  //       //   x: pageX - inputPosition.left
-  //       // }
-  //     })
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //   }
-  // }
-  //
-  // onMouseUp (e){
-  //   this.setState({
-  //     dragging: false
-  //   })
-  //   e.stopPropagation()
-  //   e.preventDefault()
-  // }
-  //
-  // getInputPositionX (e){
-  //   return e.pageX || e.touches[0].pageX;
-  // }
-  //
-  // setPosition (inputPosition){
-  //   // console.log('setPosition: what is state before', this.state);
-  //   console.log('setPosition: what is inputPosition', inputPosition);
-  //   this.setState({
-  //     position: inputPosition
-  //   })
-  // }
-
-  // onMouseMove (e){
-  //
-  //   console.log('insideMouseMove')
-  //   // console.log('what is e', e)
-  //   if(this.state.dragging){
-  //     //e.persist()
-  //
-  //     // console.log('inside mousemove');
-  //     // console.log('inside mousemove: what is state', this.state);
-  //     const inputPosition = this.getInputPositionX(e);
-  //     // console.log('what is inputPosition', inputPosition);
-  //     this.setPosition(inputPosition);
-  //     // console.log('inside mousemove: what is post-state', this.state);
-  //     e.stopPropagation()
-  //     e.preventDefault()
-  //   }
-  // }
-
-  // deBounce (func, wait){
-  //   console.log('insidedeBounce')
-  //   let timeout;
-  //   return ()=>{
-  //     console.log('what is func', func)
-  //     console.log('what is wait', wait)
-  //     clearTimeout(timeout);
-  //     timeout = setTimeout(function(){
-  //       timeout = null;
-  //       func.call()
-  //     }, wait);
-  //
-  //   };
-  // }
 
   componentDidMount (){
     console.log('SliderButton.componentDidMount', this)
@@ -117,21 +26,14 @@ class SliderButton extends React.Component {
     // document.addEventListener('touchend', this.onMouseUp);
 
     const button = ReactDOM.findDOMNode(this.refs.button);
-    // button.addEventListener('mousedown', this.onMouseDown)
-    // button.addEventListener('touchstart', this.onMouseDown)
-    // window.addEventListener('resize', this.handleResize);
+
     console.log('height button is', button.getBoundingClientRect().height)
 
     this.setState({
       width: button.getBoundingClientRect().width,
-      height:button.getBoundingClientRect().height
+      height: button.getBoundingClientRect().height
     })
 
-    // this.setState({
-    //   current: this.state.constraints.left,
-    // })
-    // console.log('didMount: what is this.state', this.state);
-    // this.updateSlideButtonRelativePosition();
   }
 
   // handleResize (e){
@@ -192,7 +94,7 @@ class SliderButton extends React.Component {
     // if(nextProps.relativePosition){
     //   console.log('what is nextProps.relativePosition', nextProps.relativePosition);
 
-    ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.width / 2)}px; top:${this.state.height*(2/3)}px;`
+    ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.width / 2)}px; top:${this.state.height * (2 / 3)}px;`
 
     this.props.updateSlideButtonRelativePosition(this, this.state.position, this.state.width);
 
@@ -208,34 +110,29 @@ class SliderButton extends React.Component {
   }
 
   render (){
-    // console.log('what is this.props', this.props);
-    //{/*<Button ref="button" className={this.props.className}>{this.props.amount}</Button>*/}
-    // console.log('SliderButton.render: this.props', this.props);
-    // document.addEventListener('mousemove', this.onMouseMove);
     console.log('SliderButton.render: props', this.props);
     return (
-      <Container ref="button"
-                 hasTextCentered={true}
-                 className={this.props.className}
-                 onMouseDown={this.props.mouseDown}
-                 onTouchStart={this.props.mouseDown}
-
-                 onMouseUp={this.props.mouseUp}
-                 onTouchEnd={this.props.mouseUp}
+      <Level ref="button"
+             hasTextCentered={true}
+             className={this.props.className}
+             onMouseDown={this.props.mouseDown}
+             onTouchStart={this.props.mouseDown}
+             onMouseUp={this.props.mouseUp}
+             onTouchEnd={this.props.mouseUp}
       >
-        <div>{numeral(this.props.amount).format('0,0[.]00')}</div>
-      </Container>
+        <LevelLeft><LevelItem className={"arrow-left"}/></LevelLeft>
+        <LevelItem hasTextCentered={true} className={'promisefin_slider__button__amount'}>${this.formatAmount(this.state.amount)}</LevelItem>
+        <LevelRight><LevelItem className={"arrow-right"}/></LevelRight>
 
+      </Level>
 
     )
   }
 }
-;
-//
-// SliderButton.defaultProps = {
-//   minAmount: '3000',
-//   maxAmount: '35000',
-//   defaultAmount: '15000',
-//   step: '1000'
-// }
+
 export default SliderButton;
+/*
+<LevelLeft><LevelItem><div className={"arrow-left"}/></LevelItem></LevelLeft>
+<LevelItem hasTextCentered={true} className={'promisefin_slider__button__amount'}><div>${this.formatAmount(this.state.amount)}</div></LevelItem>
+  <LevelRight><LevelItem><div className={"arrow-right"}></div></LevelItem></LevelRight>
+*/

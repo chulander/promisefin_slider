@@ -4,33 +4,33 @@ import {Content, Container} from 're-bulma';
 class Restrictions extends Component {
   constructor (props){
     super(props)
-    this.state = {
-      disclaimer: props.disclaimer,
-      restrictions: props.restrictions
-    }
     this.formatAmount = props.formatAmount.bind(this)
     this.getRestrictionsDisclaimer = this.getRestrictionsDisclaimer.bind(this)
   }
 
-  getRestrictionsDisclaimer (){
+  getRestrictionsDisclaimer (props){
 
-    const stateList = Array.prototype.reduce.call(this.state.restrictions, (c, n, i)=>{
+    const regionList = Array.prototype.reduce.call(this.props.restrictions, (c, n, i, arr)=>{
+      const formattedAmount = `($${this.formatAmount(n.amount)})`;
+      const regionFormattedAmmount = `${n.region} ${formattedAmount}`;
       if(i === 0){
-        c = `${n.state} ${this.formatAmount(n.amount)}`;
+        c = `$${this.formatAmount(this.props.minAmount)}: ${regionFormattedAmmount}`;
+      }
+      else if(i ===arr.length-1) {
+        c = `${c}, and ${regionFormattedAmmount}`;
       }
       else {
-        c = `${c}, ${n.state} ${this.formatAmount(n.amount)}`;
+        c = `${c}, ${regionFormattedAmmount}`;
       }
       return c;
     }, '');
-    return `${this.state.disclaimer} ${stateList}.`
+    return `${this.props.disclaimer} ${regionList}.`
   }
 
-  //The following states have minimum loan amounts above $3,000: GA ($4,000), OH ($6,000), and MA ($7,000).
   render (){
     return (
       <Content>
-        <p className={this.props.className}>{this.getRestrictionsDisclaimer()}</p>
+        <p className={this.props.className}>{this.getRestrictionsDisclaimer(this.props)}</p>
       </Content>
     )
   }

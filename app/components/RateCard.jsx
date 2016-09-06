@@ -16,10 +16,10 @@ class SliderCard extends Component {
 
   getRangeAmount (){
     if(this.state.rateType === 'dynamic'){
-      return `${this.formatAmount(this.state.minAmount)} - ${this.formatAmount(this.state.maxAmount)}`;
+      return `$${this.formatAmount(this.state.minAmount)} - $${this.formatAmount(this.state.maxAmount)}`;
     }
     else {
-      return `${this.state.minAmount} - ${this.state.maxAmount}`;
+      return `$${this.state.minAmount} - $${this.state.maxAmount}`;
     }
   }
 
@@ -54,7 +54,7 @@ class SliderCard extends Component {
     return (
       <Column size={'is4'} style={style} className={className}>
         <Title size={'is5'} className='promisefin_ratecard__title'>{this.props.title}</Title>
-        <Subtitle size={'is5'}>{this.getRangeAmount()}</Subtitle>
+        <Subtitle className='promsefin_ratecard__amount'>{this.getRangeAmount()}</Subtitle>
       </Column>
     )
   }

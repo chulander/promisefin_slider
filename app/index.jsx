@@ -15,7 +15,7 @@ class CheckRates extends React.Component {
     this.updateAmount = this.updateAmount.bind(this)
   }
   formatAmount(amount){
-    return `$${numeral(amount).format('0,0[.]00')}`
+    return `${numeral(amount).format('0,0[.]00')}`
   }
   updateAmount (amount){
     this.setState({
@@ -28,10 +28,14 @@ class CheckRates extends React.Component {
       <Container className={this.props.className}>
         <Slider
           amount={this.state.amount}
+          minAmount={this.props.minAmount}
+          maxAmount={this.props.maxAmount}
+          step={this.props.step}
           updateAmount={this.updateAmount}
           formatAmount={this.formatAmount}
         />
         <Restrictions
+          minAmount={this.props.minAmount}
           restrictions={this.props.restrictions}
           formatAmount={this.formatAmount}
         />
@@ -46,17 +50,20 @@ class CheckRates extends React.Component {
 }
 CheckRates.defaultProps = {
   amount: 15000,
+  minAmount: 3000,
+  maxAmount: 35000,
+  step: 1000,
   restrictions:[
     {
-      state:'GA',
+      region:'GA',
       amount:3000
     },
     {
-      state:'OH',
+      region:'OH',
       amount:4000
     },
     {
-      state:'MA',
+      region:'MA',
       amount:7000
     }
   ],

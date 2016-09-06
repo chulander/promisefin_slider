@@ -27,12 +27,12 @@ class SliderProgressAmounts extends Component {
       <Level>
         <LevelLeft>
           <LevelItem>
-            <p>{this.formatAmount(this.props.minAmount)}</p>
+            <p>${this.formatAmount(this.props.minAmount)}</p>
           </LevelItem>
         </LevelLeft>
         <LevelRight>
           <LevelItem>
-            <p>{this.formatAmount(this.props.maxAmount)}</p>
+            <p>${this.formatAmount(this.props.maxAmount)}</p>
           </LevelItem>
         </LevelRight>
       </Level>

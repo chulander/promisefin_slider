@@ -5,7 +5,6 @@ import {Section, Columns, Container} from 're-bulma';
 import SliderButton from '../components/SliderButton';
 import SliderProgress from '../components/SliderProgress';
 import SliderAmountLimits from '../components/SliderAmountLimits';
-import numeral from 'numeral';
 class Slider extends React.Component {
 
   constructor (props){
@@ -179,9 +178,6 @@ class Slider extends React.Component {
 Slider.defaultProps = {
   id: 'button',
   className: 'promisefin_slider__button',
-  minAmount: 3000,
-  maxAmount: 35000,
-  step: 1000,
   dragging: false,
 }
 
