@@ -98,6 +98,9 @@ class Slider extends React.Component {
     // window.addEventListener('resize', this.handleResize);
     // console.log('Slider.componentDidMount this.props', this.props)
     // console.log('Slider.componentDidMount this.state', this.state)
+    this.setState({
+      dragging:false
+    })
   }
 
   handleResize (){
@@ -176,8 +179,7 @@ class Slider extends React.Component {
 //
 Slider.defaultProps = {
   id: 'button',
-  className: 'promisefin_slider__button',
-  dragging: false,
+  className: 'promisefin_slider__button'
 }
 
 Slider.updateSliderProgressDimensions = function (sliderProgress){
