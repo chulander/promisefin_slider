@@ -93,7 +93,7 @@ class SliderButton extends React.Component {
     console.log('SliderButton.componentDidUpdate this.state', this.state);
     // if(nextProps.relativePosition){
     //   console.log('what is nextProps.relativePosition', nextProps.relativePosition);
-
+    console.log('SliderButton.componentDidUpdate this', this)
     ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.width / 2)}px; top:${this.state.height * (2 / 3)}px;`
 
     this.props.updateSlideButtonRelativePosition(this, this.state.position, this.state.width);
@@ -120,9 +120,9 @@ class SliderButton extends React.Component {
              onMouseUp={this.props.mouseUp}
              onTouchEnd={this.props.mouseUp}
       >
-        <LevelLeft><LevelItem className={"arrow-left"}/></LevelLeft>
+        <LevelLeft><LevelItem className={'promisefin_slider__button__arrow_left'}/></LevelLeft>
         <LevelItem hasTextCentered={true} className={'promisefin_slider__button__amount'}>${this.formatAmount(this.state.amount)}</LevelItem>
-        <LevelRight><LevelItem className={"arrow-right"}/></LevelRight>
+        <LevelRight><LevelItem className={'promisefin_slider__button__arrow_right'}/></LevelRight>
 
       </Level>
 

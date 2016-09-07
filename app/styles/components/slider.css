@@ -5,9 +5,9 @@
   /*bottom: -23px !important;*/
   background: #fdfdfd !important;
   border: 1px solid #ccc !important;
-  width: 7rem !important;
+  width: 8rem !important;
   border-radius: .5rem !important;
-  line-height: 3.5rem !important;
+  line-height: 3.4rem !important;
   text-align: center !important;
   color: #333 !important;
   font-weight: 700 !important;
@@ -17,13 +17,13 @@
   box-sizing: border-box !important;
 }
 .promisefin_slider__button__amount{
-  font-size:1.1rem !important;
-  line-height: 2.85rem !important;
+  font-size:1.15rem !important;
+  line-height: 3.25rem !important;
   color:#333 !important;
   font-weight: 700 !important;
 }
 
-.arrow-left {
+.promisefin_slider__button__arrow_left {
   width: 0 !important;
   height: 0 !important;
   border-bottom: 0.5rem solid transparent !important;  /* left arrow slant */
@@ -35,7 +35,7 @@
 }
 
 /* create an arrow that points right */
-.arrow-right{
+.promisefin_slider__button__arrow_right{
   width: 0 !important;
   height: 0 !important;
   border-bottom: 0.5rem solid transparent !important;  /* left arrow slant */
@@ -45,5 +45,20 @@
   line-height: 0 !important;
   padding-right:0.2rem !important;
 }
+
+
+.promisefin_slider-progress--color::-webkit-progress-value{
+
+  background-color: #2CCCD2 !important;
+  /* for IE10 */
+  color:#2CCCD2 !important;
+}
+.promisefin_slider-progress--color::-moz-progress-bar {
+  background-color: #2CCCD2 !important;
+  /* for IE10 */
+  color:#2CCCD2 !important;
+
+}
+
 
 

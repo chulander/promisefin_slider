@@ -1,5 +1,5 @@
 "use strict";
-import React, {Component}from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import {Progress} from 're-bulma';
@@ -42,7 +42,7 @@ class SliderProgress extends React.Component {
 
   render (){
     return (
-        <Progress color="isPrimary" value={this.props.percent *100} size="isMedium"  max="100" style={{marginBottom: '5px'}} />
+        <Progress  className={'promisefin_slider-progress--color'} value={this.props.percent *100} size="isMedium"  max="100" style={{marginBottom: '5px'}} />
     )
   }
 }

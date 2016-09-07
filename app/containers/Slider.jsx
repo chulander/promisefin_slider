@@ -1,7 +1,8 @@
 "use strict";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Section, Columns, Container} from 're-bulma';
+import {Container} from 're-bulma';
+import {debounce} from 'throttle-debounce';
 import SliderButton from '../components/SliderButton';
 import SliderProgress from '../components/SliderProgress';
 import SliderAmountLimits from '../components/SliderAmountLimits';
@@ -22,16 +23,41 @@ class Slider extends React.Component {
     this.handleResize = this.handleResize.bind(this)
     // this.onMouseMove=this.onMouseMove.bind(this)
     // this.onMouseMove=this.deBounce.bind(this, this.onMouseMove.bind(this),10)
-    this.onMouseMove = this.onMouseMove.bind(this)
+    // this.onMouseMove = this.onMouseMove.bind(this)
+
     this.mouseDown = this.mouseDown.bind(this)
     this.mouseUp = this.mouseUp.bind(this)
     this.mouseClick = this.mouseClick.bind(this)
     this.getInputPositionX = this.getInputPositionX.bind(this)
     this.setPosition = this.setPosition.bind(this)
+    this.moveHandler = debounce(10, false, this.moveHandler)
+    // this.moveHandler = this.moveHandler.bind(this)
+    this.mouseMove = this.mouseMove.bind(this)
+  }
+
+  moveHandler (e){
+
+    console.log('inside moveHandler', e.button);
+    if(this.state.dragging && (e.button === 0 || (e.touches && e.touches.length))){
+      console.log('Slider.onMouseMove')
+      const inputPosition = this.getInputPositionX(e);
+      this.setPosition(inputPosition);
+      e.stopPropagation()
+      e.preventDefault()
+    }
+  }
+
+  mouseMove (e){
+    // e.persist();
+    console.log('inside mouseMove');
+    // console.log('what is e', e)
+    this.moveHandler(e)
 
   }
+
   mouseDown (e){
     // only left mouse button
+    console.log('insidse mouseDown', this.state)
     if(e.button === 0 || (e.touches && e.touches.length)){
       this.setState({
         dragging: true,
@@ -42,6 +68,7 @@ class Slider extends React.Component {
   }
 
   mouseUp (e){
+    console.log('insidse mouseUp', this.state)
     this.setState({
       dragging: false
     })
@@ -50,6 +77,8 @@ class Slider extends React.Component {
   }
 
   getInputPositionX (e){
+    const val = e.pageX || e.touches[0].pageX;
+    console.log('getInputPositionX', val);
     return e.pageX || e.touches[0].pageX;
   }
 
@@ -60,12 +89,10 @@ class Slider extends React.Component {
     })
   }
 
-  onMouseMove (e){
 
-    // console.log('what is e', e)
-
-    if(this.state.dragging){
-      console.log('Slider.onMouseMove')
+  mouseClick (e){
+    // only left mouse button
+    if(e.button === 0 || (e.touches && e.touches.length)){
       const inputPosition = this.getInputPositionX(e);
       this.setPosition(inputPosition);
       e.stopPropagation()
@@ -73,59 +100,45 @@ class Slider extends React.Component {
     }
   }
 
-  mouseClick (e){
-    const inputPosition = this.getInputPositionX(e);
-    this.setPosition(inputPosition);
-    e.stopPropagation()
-    e.preventDefault()
-  }
-
-  deBounce (func, wait){
-    console.log('insidedeBounce')
-    let timeout;
-    return ()=>{
-      clearTimeout(timeout);
-      timeout = setTimeout(function (){
-        timeout = null;
-        func.call()
-      }, wait);
-
-    };
-  }
 
 
   componentDidMount (){
     // window.addEventListener('resize', this.handleResize);
     // console.log('Slider.componentDidMount this.props', this.props)
     // console.log('Slider.componentDidMount this.state', this.state)
+    //the drag needs to be not just on the slider, but the spaces above it.
+    window.addEventListener('mousemove', this.mouseMove)
+    window.addEventListener('mouseup', this.mouseUp)
     this.setState({
-      dragging:false
+      dragging: false
     })
   }
-
+  componentWillUnmount(){
+    window.removeEventListener('mousemove', this.mouseMove)
+    window.removeEventListener('mouseup', this.mouseUp)
+  }
   handleResize (){
     // const bar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
     // console.log('handleResize what is this progress bar ', bar)
     // this.constructor.updateSliderProgressDimensions.call(this);
   }
 
-  shouldComponentUpdate (nextProps, nextState){
-    console.log('Slider.shouldComponentUpdate nextProps', nextProps)
-    console.log('Slider.shouldComponentUpdate this.props', this.props)
-    console.log('Slider.shouldComponentUpdate nextState', nextState)
-    console.log('Slider.shouldComponentUpdate this.state', this.state)
-    const test = (
-      nextState.constraintWidth !== this.state.constraintWidth ||
-      nextState.constraintLeft !== this.state.constraintLeft ||
-      nextState.constraintRight !== this.state.constraintRight ||
-      nextState.constraintLeft !== this.state.constraintLeft ||
-      nextState.constraintRight !== this.state.constrainRight ||
-      nextState.constraintWidth !== this.state.constraintWidth ||
-      nextState.relativePosition !== this.state.relativePosition
-    )
-    console.log('Slider.shouldComponentUpdate test', test)
-    return test;
-  }
+  // shouldComponentUpdate (nextProps, nextState){
+  //   console.log('Slider.shouldComponentUpdate nextProps', nextProps)
+  //   console.log('Slider.shouldComponentUpdate this.props', this.props)
+  //   console.log('Slider.shouldComponentUpdate nextState', nextState)
+  //   console.log('Slider.shouldComponentUpdate this.state', this.state)
+  //   const test = (
+  //     nextState.constraintWidth !== this.state.constraintWidth ||
+  //     nextState.constraintLeft !== this.state.constraintLeft ||
+  //     nextState.constraintRight !== this.state.constraintRight ||
+  //     nextState.relativePosition !== this.state.relativePosition ||
+  //     nextState.dragging !== this.state.dragging ||
+  //     nextState.percent !== this.state.percent
+  //   )
+  //   console.log('Slider.shouldComponentUpdate test', test)
+  //   return test;
+  // }
 
   componentWillReceiveProps (nextProps){
     console.log('Slider.componentWillReceiveProps nextProps', nextProps)
@@ -145,12 +158,11 @@ class Slider extends React.Component {
     return (
 
       <Container
-        onMouseMove={this.onMouseMove}
-        onMouseLeave={this.mouseUp}
-        onTouchMove={this.onMouseMove}
+
         onTouchCancel={this.mouseUp}
         onTouchEnd={this.mouseUp}
         onMouseDown={this.mouseClick}
+        onMouseUp={this.mouseUp}
       >
         <SliderButton
           ref="button" {...this.state}

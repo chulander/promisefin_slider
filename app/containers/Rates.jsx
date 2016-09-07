@@ -69,20 +69,20 @@ class Rates extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState){
-    console.log('Rates.shouldComponentUpdate nextProps', nextProps)
-    console.log('Rates.shouldComponentUpdate this.props', this.props)
-    console.log('Rates.shouldComponentUpdate nextState', nextState)
-    console.log('Rates.shouldComponentUpdate this.state', this.state)
+    // console.log('Rates.shouldComponentUpdate nextProps', nextProps)
+    // console.log('Rates.shouldComponentUpdate this.props', this.props)
+    // console.log('Rates.shouldComponentUpdate nextState', nextState)
+    // console.log('Rates.shouldComponentUpdate this.state', this.state)
     const test = (
       nextState.amount !== this.state.amount
     )
-    console.log('Rates.shouldComponentUpdate test', test)
+    // console.log('Rates.shouldComponentUpdate test', test)
     return test;
   }
 
   componentWillReceiveProps (nextProps){
-    console.log('Rates.componentWillReceiveProps nextProps', nextProps)
-    console.log('Rates.componentWillReceiveProps nextProps.amount', nextProps.amount)
+    // console.log('Rates.componentWillReceiveProps nextProps', nextProps)
+    // console.log('Rates.componentWillReceiveProps nextProps.amount', nextProps.amount)
 
     this.setState(nextProps);
 
@@ -90,10 +90,10 @@ class Rates extends Component {
 
   componentDidUpdate (prevProps, prevState){
     // this.setState({maxOriginationFee: this.getMaxOriginationFee(this.state.amount)});
-    console.log('Rates.componentDidUpdate prevProps', prevProps);
-    console.log('Rates.componentDidUpdate this.props', this.props);
-    console.log('Rates.componentDidUpdate prevState', prevState);
-    console.log('Rates.componentDidUpdate this.state', this.state);
+    // console.log('Rates.componentDidUpdate prevProps', prevProps);
+    // console.log('Rates.componentDidUpdate this.props', this.props);
+    // console.log('Rates.componentDidUpdate prevState', prevState);
+    // console.log('Rates.componentDidUpdate this.state', this.state);
   }
 
 
