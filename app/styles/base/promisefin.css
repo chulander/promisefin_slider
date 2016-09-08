@@ -10,6 +10,15 @@
   .is-block-mobile {
     display: block !important;
   }
+  .is-hidden-mobile {
+    display: none !important;
+  }
+  .is-flex-mobile {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
 }
 
 @media screen and (min-width: 769px) {
@@ -46,4 +55,11 @@
   .is-block-widescreen {
     display: block !important;
   }
+  .is-flex-widescreen {
+    display: -webkit-box !important;
+    display: -webkit-flex !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }
 }
+

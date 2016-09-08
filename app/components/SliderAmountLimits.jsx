@@ -24,7 +24,7 @@ class SliderProgressAmounts extends Component {
 
   render (){
     return (
-      <Level>
+      <Level className={['is-flex-mobile']}>
         <LevelLeft>
           <LevelItem>
             <p>${this.formatAmount(this.props.minAmount)}</p>

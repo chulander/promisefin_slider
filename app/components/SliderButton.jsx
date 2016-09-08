@@ -47,17 +47,18 @@ class SliderButton extends React.Component {
 
   componentDidUpdate (prevProps, prevState){
     console.log('SliderButton.componentDidUpdate this.state.relativePosition', this.state.relativePosition);
-    // console.log('what is this', ReactDOM.findDOMNode(this));
-    // ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.buttonWidth / 2)}px; top:${this.state.buttonHeight * (2 / 3)}px;`
   }
 
   render (){
-
     const customStyle= {
       marginLeft:`${this.state.relativePosition}px`,
-      top:`${this.state.buttonHeight * (2 / 3)}px`,
       alignItems:'center'
     }
+    const topAdjustment = this.props.getButtonTopPositionRelativeToSliderProgress(this.state.buttonHeight);
+    if (topAdjustment && !Number.isNaN(topAdjustment)){
+        customStyle.top=this.state.buttonHeight - this.props.constraintHeight
+    }
+
     return (
       <Columns
         style={customStyle}
