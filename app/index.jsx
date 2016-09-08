@@ -25,7 +25,7 @@ class CheckRates extends React.Component {
 
   render (){
     return (
-      <Container className={this.props.className}>
+      <Container className={this.props.className} isFluid={true}>
         <Slider
           amount={this.state.amount}
           minAmount={this.props.minAmount}

@@ -1,6 +1,6 @@
 @import 'normalize.css';
-@import 'styles/base/elements';
-@import 'styles/base/promisefin';
-@import 'styles/components/slider';
-@import 'styles/components/restrictions';
-@import 'styles/components/rates';
+@import 'styles/base/elements.css';
+@import 'styles/base/promisefin.css';
+@import 'styles/components/slider.css';
+@import 'styles/components/restrictions.css';
+@import 'styles/components/rates.css';

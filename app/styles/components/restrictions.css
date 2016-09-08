@@ -1,4 +1,32 @@
 .promisefin_restrictions__content {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial,Helvetica,sans-serif !important;
   color:#212121;
+  line-height: 1.75 !important;
 }
+
+
+/*MOBILE*/
+@media screen and (max-width: 768px) {
+  .promisefin_restrictions__content {
+    font-size:85% !important;
+  }
+
+}
+
+/*TABLET*/
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .promisefin_restrictions__content {
+    font-size:85% !important;
+  }
+
+}
+/*DESKTOP OR GREATER*/
+@media screen and (min-width: 980px) {
+  .promisefin_restrictions__content {
+    font-size:85% !important;;
+  }
+}
+
+
+
+

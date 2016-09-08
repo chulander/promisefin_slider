@@ -17,7 +17,6 @@ class Slider extends React.Component {
       step: props.step,
       dragging: props.dragging,
       relativePosition: props.relativePosition,
-      className: props.className
     }
 
     // Event Handlers
@@ -291,6 +290,7 @@ class Slider extends React.Component {
           mouseDown={this.mouseDown}
           mouseUp={this.mouseUp}
           formatAmount={this.props.formatAmount}
+          class={this.props.class}
           getButtonTopPositionRelativeToSliderProgress={this.getButtonTopPositionRelativeToSliderProgress}
         />
 
@@ -310,7 +310,7 @@ class Slider extends React.Component {
 //
 Slider.defaultProps = {
   id: 'button',
-  className: 'promisefin_slider__button'
+  class: 'promisefin_slider__button'
 }
 
 

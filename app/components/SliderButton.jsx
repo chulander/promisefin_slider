@@ -63,7 +63,7 @@ class SliderButton extends React.Component {
       <Columns
         style={customStyle}
         responsive={'isMobile'}
-        className={this.props.className}
+        className={this.props.class}
         onMouseDown={this.props.mouseDown}
         onTouchStart={this.props.mouseDown}
         onMouseUp={this.props.mouseUp}

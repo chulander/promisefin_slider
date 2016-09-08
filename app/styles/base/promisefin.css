@@ -2,10 +2,13 @@
 .promisefin_checkrate_container{
   max-width:47rem;
   top:100px;
-  padding:0 4%;
+  /*padding:0 4%;*/
+  margin:0 auto !important;
 }
-
-
+.promisefin_checkrate_container.__re-bulma-container{
+  margin: 0 auto !important;
+}
+/*MOBILE*/
 @media screen and (max-width: 768px) {
   .is-block-mobile {
     display: block !important;
@@ -20,37 +23,35 @@
     display: flex !important;
   }
 }
-
-@media screen and (min-width: 769px) {
-  .is-block-tablet {
-    display: block !important;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 979px) {
-  .is-block-tablet-only {
-    display: block !important;
-  }
-}
-
+/*TOUCH*/
 @media screen and (max-width: 979px) {
   .is-block-touch {
     display: block !important;
   }
 }
 
-@media screen and (min-width: 980px) {
-  .is-block-desktop {
+/*TABLET*/
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .is-block-tablet-only {
     display: block !important;
   }
 }
 
+/*AT LEAST TABLET*/
+@media screen and (min-width: 769px) {
+  .is-block-tablet {
+    display: block !important;
+  }
+}
+
+/*DESKTOP*/
 @media screen and (min-width: 980px) and (max-width: 1179px) {
   .is-block-desktop-only {
     display: block !important;
   }
 }
 
+/*WIDESCREEN*/
 @media screen and (min-width: 1180px) {
   .is-block-widescreen {
     display: block !important;
@@ -62,4 +63,14 @@
     display: flex !important;
   }
 }
+
+
+/*DESKTOP OR GREATER*/
+@media screen and (min-width: 980px) {
+  .is-block-desktop {
+    display: block !important;
+  }
+}
+
+
 

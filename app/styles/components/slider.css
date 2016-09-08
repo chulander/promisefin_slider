@@ -7,7 +7,7 @@
   border: 1px solid #ccc !important;
   /*width: 8rem !important;*/
   max-width:10rem;
-  width:25%;
+  width:25% !important;
   border-radius: .5rem !important;
   line-height: 3.3rem !important;
   text-align: center !important;
@@ -20,7 +20,7 @@
 }
 .promisefin_slider__button__amount{
   /*font-size:calc(1rem * 1vw) !important;*/
-  /*font-size:1.15rem !important;*/
+  font-size:1.15rem;
   line-height: 2.35rem !important;
   color:#333 !important;
   font-weight: 700 !important;
@@ -62,6 +62,91 @@
   /* for IE10 */
   color:#2CCCD2 !important;
 
+}
+
+/*MOBILE TINY*/
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .promisefin_slider__button__amount{
+    /*font-size:calc(1rem * 1vw) !important;*/
+    font-size:1rem !important;
+  }
+  .promisefin_slider__button{
+    width:45% !important;
+  }
+  .__re-bulma_column {
+    padding: 0.2rem 0;
+  }
+  .promisefin_slider__button__arrow_left {
+    width: 0 ;
+    height: 0 ;
+    border-bottom: 0.5rem solid transparent ;  /* left arrow slant */
+    border-top: 0.5rem solid transparent ; /* right arrow slant */
+    border-right: 0.9rem solid #ccc ; /* bottom, add background color here */
+    font-size: 0 ;
+    line-height: 0 ;
+    /*padding-left:0.2rem ;*/
+    vertical-align: middle ;
+  }
+
+  /* create an arrow that points right */
+  .promisefin_slider__button__arrow_right{
+    width: 0 !important;
+    height: 0 !important;
+    border-bottom: 0.5rem solid transparent !important;  /* left arrow slant */
+    border-top: 0.5rem solid transparent !important; /* right arrow slant */
+    border-left: 0.9rem solid #ccc !important; /* bottom, add background color here */
+    font-size: 0 !important;
+    line-height: 0 !important;
+    /*padding-right:0.2rem !important;*/
+  }
+
+}
+
+
+/*MOBILE*/
+@media screen and (max-width: 768px) {
+  .promisefin_slider__button__amount{
+    /*font-size:calc(1rem * 1vw) !important;*/
+    font-size:1rem !important;
+  }
+  .promisefin_slider__button{
+    max-width:7.5rem !important;
+    width:35% !important;
+  }
+  .__re-bulma_column {
+    padding: 0.4rem 0.28rem !important;
+  }
+
+}
+
+/*TABLET*/
+@media screen and (min-width: 769px) and (max-width: 979px) {
+  .promisefin_slider__button__amount{
+    /*font-size:calc(1rem * 1vw) !important;*/
+    font-size:1rem !important;
+  }
+  .promisefin_slider__button{
+    max-width:7.5rem !important;
+    width:35% !important;
+  }
+  .__re-bulma_column {
+    padding: 0.4rem 0.28rem !important;
+  }
+
+}
+/*DESKTOP OR GREATER*/
+@media screen and (min-width: 980px) {
+  .promisefin_slider__button__amount{
+    /*font-size:calc(1rem * 1vw) !important;*/
+    font-size:1rem !important;
+  }
+  .promisefin_slider__button{
+    max-width:7.5rem !important;
+    width:35% !important;
+  }
+  .__re-bulma_column {
+    padding: 0.4rem 0.28rem !important;
+  }
 }
 
 

@@ -99,11 +99,11 @@ class Rates extends Component {
 
   render (){
     return (
-      <Columns className={'is-flex-mobile'} responsive={'isMobile'}>
+      <Columns className={'is-hidden-mobile'} responsive={'isTablet'}>
         {this.getRateTypes(this.props).map((item)=>{
           return <RateCard
             key={item.id}
-            className={item.className}
+            className={item.class}
             formatAmount={this.props.formatAmount}
             {...item}
           />
@@ -124,21 +124,21 @@ Rates.defaultProps = {
     title: 'Monthly Payment:',
     symbol: '<sup>&#x2020;</sup>',
     width: '31%',
-    className:'promisefin_ratecard--left'
+    class:'promisefin_ratecard--left'
   }, {
     id: 'fees',
     rateType: 'dynamic',
     title: 'Fee at Origination:',
     symbol: '<sup>&#x2020;</sup>',
     width: '33%',
-    className:'promisefin_ratecard--center'
+    class:'promisefin_ratecard--center'
   }, {
     id: 'fixedApr',
     rateType: 'static',
     title: 'Fixed APR:',
     symbol: '*',
     width: '31%',
-    className:'promisefin_ratecard--right',
+    class:'promisefin_ratecard--right',
     minAmount: '6.99%',
     maxAmount: '29.99%'
   }]
