@@ -1,5 +1,6 @@
 @import 'normalize.css';
 @import 'styles/base/elements';
+@import 'styles/base/promisefin';
 @import 'styles/components/slider';
 @import 'styles/components/restrictions';
 @import 'styles/components/rates';

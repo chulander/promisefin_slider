@@ -1,7 +1,7 @@
 "use strict";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Level, LevelLeft, LevelRight, LevelItem} from 're-bulma';
+import {Columns, Column, Level, LevelLeft, LevelRight, LevelItem} from 're-bulma';
 
 
 class SliderButton extends React.Component {
@@ -47,35 +47,66 @@ class SliderButton extends React.Component {
 
   componentDidUpdate (prevProps, prevState){
     console.log('SliderButton.componentDidUpdate this.state.relativePosition', this.state.relativePosition);
-    ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.buttonWidth / 2)}px; top:${this.state.buttonHeight * (2 / 3)}px;`
+    // console.log('what is this', ReactDOM.findDOMNode(this));
+    // ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.buttonWidth / 2)}px; top:${this.state.buttonHeight * (2 / 3)}px;`
   }
 
   render (){
+
+    const customStyle= {
+      marginLeft:`${this.state.relativePosition}px`,
+      top:`${this.state.buttonHeight * (2 / 3)}px`,
+      alignItems:'center'
+    }
     return (
-      <Level
-        hasTextCentered={true}
+      <Columns
+        style={customStyle}
+        responsive={'isMobile'}
         className={this.props.className}
         onMouseDown={this.props.mouseDown}
         onTouchStart={this.props.mouseDown}
         onMouseUp={this.props.mouseUp}
         onTouchEnd={this.props.mouseUp}
       >
-        <LevelLeft>
-          <LevelItem
-            className={'promisefin_slider__button__arrow_left'} />
-        </LevelLeft>
-        <LevelItem
-          hasTextCentered={true}
-          className={'promisefin_slider__button__amount'}>
+        <Column>
+          <div className={'promisefin_slider__button__arrow_left'}/>
+        </Column>
+        <Column>
+          <div className={'promisefin_slider__button__amount'}>
           ${this.props.formatAmount(this.state.amount)}
-        </LevelItem>
-        <LevelRight>
-          <LevelItem
+          </div>
+        </Column>
+        <Column>
+          <div
             className={'promisefin_slider__button__arrow_right'} />
-        </LevelRight>
-      </Level>
+        </Column>
+      </Columns>
     )
   }
 }
+/*
 
+<Level
+  hasTextCentered={true}
+  className={this.props.className}
+  onMouseDown={this.props.mouseDown}
+  onTouchStart={this.props.mouseDown}
+  onMouseUp={this.props.mouseUp}
+  onTouchEnd={this.props.mouseUp}
+>
+  <LevelLeft>
+    <LevelItem
+      className={'promisefin_slider__button__arrow_left'} />
+  </LevelLeft>
+  <LevelItem
+    hasTextCentered={true}
+    className={'promisefin_slider__button__amount'}>
+    ${this.props.formatAmount(this.state.amount)}
+  </LevelItem>
+  <LevelRight>
+    <LevelItem
+      className={'promisefin_slider__button__arrow_right'} />
+  </LevelRight>
+</Level>
+*/
 export default SliderButton;

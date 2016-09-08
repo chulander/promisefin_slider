@@ -99,7 +99,7 @@ class Rates extends Component {
 
   render (){
     return (
-      <Columns>
+      <Columns responsive={'isMobile'}>
         {this.getRateTypes(this.props).map((item)=>{
           return <RateCard
             key={item.id}
