@@ -1,68 +1,26 @@
 "use strict";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Container, Columns, Column, Level, LevelLeft, LevelRight, LevelItem} from 're-bulma';
+import {Level, LevelLeft, LevelRight, LevelItem} from 're-bulma';
 
 
 class SliderButton extends React.Component {
-  constructor (props){
-    super(props);
-    this.state = {
-      dragging: false,
-      position: props.position,
-      percent: props.percent,
-      relativePosition: props.relativePosition,
-      amount: props.amount
-
+  constructor(props){
+    super(props)
+    this.state={
+      amount:props.amount,
+      relativePosition:props.relativePosition,
+      percent:props.percent,
+      position:props.position
     }
-    this.formatAmount = props.formatAmount.bind(this)
   }
 
-  componentDidMount (){
-    console.log('SliderButton.componentDidMount', this)
-    // document.addEventListener('mousemove', this.onMouseMove);
-    // document.addEventListener('mouseup', this.onMouseUp);
-    // document.addEventListener('touchmove', this.onMouseMove);
-    // document.addEventListener('touchend', this.onMouseUp);
-
-    const button = ReactDOM.findDOMNode(this.refs.button);
-
-    console.log('height button is', button.getBoundingClientRect().height)
-
-    this.setState({
-      width: button.getBoundingClientRect().width,
-      height: button.getBoundingClientRect().height
-    })
-
+  componentWillReceiveProps (nextProps){
+    console.log('SliderButton.componentWillReceiveProps nextProps', nextProps)
+    // const modifiedProps = Object.assign({},nextProps, this.getButtonDimension());
+    // this.setState(modifiedProps);
+    this.setState(nextProps);
   }
-
-  // handleResize (e){
-  //   const progressBar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
-  //   console.log('handleResize: old Left', this.state.constraints.left);
-  //   console.log('handleResize: new Left', progressBar.left);
-  //
-  //   console.log('handleResize: old right', this.state.constraints.right);
-  //   console.log('handleResize: new right', progressBar.right);
-  //   // const progressBarDelta = Math.abs(progressBar.left - this.state.max);
-  //   this.setState(this.state,{
-  //     position: {
-  //       x: {
-  //         constraints: {
-  //           left: progressBar.left,
-  //           right: progressBar.right
-  //         }
-  //       },
-  //       relative: {
-  //         x: progressBar.left - this.state.constraints.left
-  //       }
-  //     }
-  //   })
-  //   const button = ReactDOM.findDOMNode(this.refs.button).getBoundingClientRect();
-  //   //this.setPosition(button)
-  //
-  //   // console.log("what is resize button", progressBar);
-  //
-  // }
 
   shouldComponentUpdate (nextProps, nextState){
     console.log('SliderButton.shouldComponentUpdate nextProps', nextProps);
@@ -70,62 +28,52 @@ class SliderButton extends React.Component {
     console.log('SliderButton.shouldComponentUpdate nextState', nextState);
     console.log('SliderButton.shouldComponentUpdate this.state', this.state);
     const test = (
-      nextState.percent !== this.state.percent ||
+      // nextState.position !== this.state.position ||
+      nextState.amount !== this.state.amount ||
       nextState.relativePosition !== this.state.relativePosition ||
+      nextState.percent !== this.state.percent ||
       nextState.position !== this.state.position ||
-      nextState.width !== this.state.width ||
-      nextState.height !== this.state.height
+      nextState.buttonWidth !== this.state.buttonWidth ||
+      nextState.buttonHeight !== this.state.buttonHeight
+      // nextState.buttonWidth !== this.state.buttonWidth ||
+      // nextState.buttonHeight !== this.state.buttonHeight ||
+      // nextState.constraintLeft !== this.state.constraintLeft ||
+      // nextState.constraintRight !== this.state.constraintRight ||
+      // nextState.constraintWidth !== this.state.constraintWidth
     )
-    console.log('SliderButton.shouldComponentUpdate', test);
+    console.log('SliderButton.shouldComponentUpdate', test)
     return test;
   }
 
-  componentWillReceiveProps (nextProps){
-    console.log('SliderButton.componentWillReceiveProps nextProps', nextProps)
-    this.setState(nextProps)
-
-  }
-
   componentDidUpdate (prevProps, prevState){
-    console.log('SliderButton.componentDidUpdate prevProps', prevProps);
-    console.log('SliderButton.componentDidUpdate this.props', this.props);
-    console.log('SliderButton.componentDidUpdate prevState', prevState);
-    console.log('SliderButton.componentDidUpdate this.state', this.state);
-    // if(nextProps.relativePosition){
-    //   console.log('what is nextProps.relativePosition', nextProps.relativePosition);
-    console.log('SliderButton.componentDidUpdate this', this)
-    ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.width / 2)}px; top:${this.state.height * (2 / 3)}px;`
-
-    this.props.updateSlideButtonRelativePosition(this, this.state.position, this.state.width);
-
-
-  }
-
-  componentWillUnmount (){
-    // document.removeEventListener('mousemove', this.onMouseMove)
-    // document.removeEventListener('mouseup', this.onMouseUp)
-    // document.removeEventListener('touchmove', this.onMouseMove);
-    // document.removeEventListener('touchend', this.onMouseUp);
-    // window.removeEventListener('resize', this.handleResize);
+    console.log('SliderButton.componentDidUpdate this.state.relativePosition', this.state.relativePosition);
+    ReactDOM.findDOMNode(this).style = `margin-left: ${this.state.relativePosition - (this.state.buttonWidth / 2)}px; top:${this.state.buttonHeight * (2 / 3)}px;`
   }
 
   render (){
-    console.log('SliderButton.render: props', this.props);
     return (
-      <Level ref="button"
-             hasTextCentered={true}
-             className={this.props.className}
-             onMouseDown={this.props.mouseDown}
-             onTouchStart={this.props.mouseDown}
-             onMouseUp={this.props.mouseUp}
-             onTouchEnd={this.props.mouseUp}
+      <Level
+        hasTextCentered={true}
+        className={this.props.className}
+        onMouseDown={this.props.mouseDown}
+        onTouchStart={this.props.mouseDown}
+        onMouseUp={this.props.mouseUp}
+        onTouchEnd={this.props.mouseUp}
       >
-        <LevelLeft><LevelItem className={'promisefin_slider__button__arrow_left'}/></LevelLeft>
-        <LevelItem hasTextCentered={true} className={'promisefin_slider__button__amount'}>${this.formatAmount(this.state.amount)}</LevelItem>
-        <LevelRight><LevelItem className={'promisefin_slider__button__arrow_right'}/></LevelRight>
-
+        <LevelLeft>
+          <LevelItem
+            className={'promisefin_slider__button__arrow_left'} />
+        </LevelLeft>
+        <LevelItem
+          hasTextCentered={true}
+          className={'promisefin_slider__button__amount'}>
+          ${this.props.formatAmount(this.state.amount)}
+        </LevelItem>
+        <LevelRight>
+          <LevelItem
+            className={'promisefin_slider__button__arrow_right'} />
+        </LevelRight>
       </Level>
-
     )
   }
 }

@@ -20,41 +20,138 @@ class Slider extends React.Component {
       relativePosition: props.relativePosition,
       className: props.className
     }
-    this.handleResize = this.handleResize.bind(this)
-    // this.onMouseMove=this.onMouseMove.bind(this)
-    // this.onMouseMove=this.deBounce.bind(this, this.onMouseMove.bind(this),10)
-    // this.onMouseMove = this.onMouseMove.bind(this)
 
     this.mouseDown = this.mouseDown.bind(this)
     this.mouseUp = this.mouseUp.bind(this)
     this.mouseClick = this.mouseClick.bind(this)
     this.getInputPositionX = this.getInputPositionX.bind(this)
     this.setPosition = this.setPosition.bind(this)
-    this.moveHandler = debounce(10, false, this.moveHandler)
-    // this.moveHandler = this.moveHandler.bind(this)
-    this.mouseMove = this.mouseMove.bind(this)
+    this.mouseMove = debounce(11, false, this.mouseMove.bind(this))
+    this.getSliderProgressDimensions = this.getSliderProgressDimensions.bind(this)
+    this.getSliderButtonDimensions = this.getSliderButtonDimensions.bind(this)
+    this.convertAmountToPercent = this.convertAmountToPercent.bind(this)
+    this.convertPercentToAmount = this.convertPercentToAmount.bind(this)
+    // this.handleResize = this.handleResize.bind(this)
+    this.sliderButtonHandler=this.sliderButtonHandler.bind(this)
+    this.getSliderButtonRelativePosition = this.getSliderButtonRelativePosition.bind(this)
+    this.getSliderButtonPercent = this.getSliderButtonPercent.bind(this)
   }
 
-  moveHandler (e){
+  // handleResize (){
+  //   this.props.getSliderProgressDimensions(this);
+  //   this.props.getSliderProgressDimensions(this);
+  //   const button = ReactDOM.findDOMNode(this);
+  //   this.setState({
+  //     width: button.getBoundingClientRect().width,
+  //     height: button.getBoundingClientRect().height,
+  //     position: undefined
+  //   })
+  // }
 
-    console.log('inside moveHandler', e.button);
-    if(this.state.dragging && (e.button === 0 || (e.touches && e.touches.length))){
-      console.log('Slider.onMouseMove')
-      const inputPosition = this.getInputPositionX(e);
-      this.setPosition(inputPosition);
-      e.stopPropagation()
-      e.preventDefault()
+  getSliderButtonDimensions (){
+    const button = ReactDOM.findDOMNode(this.refs.button).getBoundingClientRect();
+    return {
+      buttonWidth: button.width,
+      buttonHeight: button.height
     }
   }
 
-  mouseMove (e){
-    // e.persist();
-    console.log('inside mouseMove');
-    // console.log('what is e', e)
-    this.moveHandler(e)
+  getSliderProgressDimensions (){
+    const progress = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
+    console.log('what is progress', progress);
+    return {
+      constraintLeft: progress.left,
+      constraintRight: progress.right,
+      constraintWidth: progress.width
+    }
+  }
+
+  getSliderButtonPercent (targetPosition, relativePosition, constraintLeft, constraintRight, constraintWidth, amount){
+    if(!targetPosition && amount){
+      console.log('getSliderButtonPercent 1')
+      return this.convertAmountToPercent(amount)
+    }
+    else if(targetPosition <= constraintLeft){
+      console.log('getSliderButtonPercent 2')
+      return 0;
+    }
+    else if(targetPosition >= constraintRight){
+      console.log('getSliderButtonPercent 3')
+      return 1;
+    }
+    else {
+      console.log('getSliderButtonPercent 4')
+      return relativePosition / constraintWidth;
+    }
+  }
+
+  getSliderButtonRelativePosition (targetPosition, constraintLeft, constraintRight, constraintWidth, amount){
+    if(!targetPosition && amount){
+      console.log('getSliderButtonRelativePosition 1')
+      return constraintWidth * this.convertAmountToPercent(amount);
+    }
+    if(targetPosition <= constraintLeft){
+      console.log('getSliderButtonRelativePosition 2')
+      return 0;
+    }
+    else if(targetPosition >= constraintRight){
+      console.log('getSliderButtonRelativePosition 3')
+      return constraintWidth;
+    }
+    else {
+      console.log('getSliderButtonRelativePosition 4')
+      return targetPosition - (constraintRight - constraintWidth)
+    }
+  }
+
+  convertAmountToPercent (amount){
+    console.log('Slider.convertAmountToPercent')
+    const totalUnits = ((this.props.maxAmount - this.props.minAmount) / this.props.step) + 1;
+    const amountUnitUsage = totalUnits - ((this.props.maxAmount - amount) / this.props.step);
+    const percent = amountUnitUsage / totalUnits
+    // console.log('Slider.convertAmountToPercent: old percent', this.state.percent)
+    // console.log('Slider.convertAmountToPercent: new percent', percent)
+    return percent;
 
   }
 
+  convertPercentToAmount (percent){
+
+    const availableUnits = ((this.props.maxAmount - this.props.minAmount) / this.props.step) + 1;
+    const unit = 100 / availableUnits; //should be about 3.333
+    const remainder = 100 - (availableUnits * unit);
+
+    let unRoundedTotalUnits = (percent * 100) / unit;
+
+    unRoundedTotalUnits = unRoundedTotalUnits + remainder;
+    let amount = Math.ceil((unRoundedTotalUnits * this.props.step) / this.props.step) * this.props.step
+    if(amount < this.props.step){
+      amount = this.props.step;
+    }
+    amount = amount + 2000;
+    if(amount >= this.props.maxAmount){
+      amount = this.props.maxAmount;
+    }
+    return amount;
+  }
+
+  mouseMove (e){
+    console.log('inside mouse move')
+    if(this.state.dragging && (e.button === 0 || (e.touches && e.touches.length))){
+      const inputPosition = this.getInputPositionX(e);
+      this.sliderButtonHandler(inputPosition)
+      e.stopPropagation()
+      e.preventDefault()
+    }
+
+  }
+  sliderButtonHandler(position){
+    const relativePosition = this.getSliderButtonRelativePosition(position, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount)
+    const percent = this.getSliderButtonPercent(position, relativePosition, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount)
+    const amount = this.convertPercentToAmount(percent)
+    this.props.updateAmount(amount);
+    this.setState({position,percent,relativePosition})
+  }
   mouseDown (e){
     // only left mouse button
     console.log('insidse mouseDown', this.state)
@@ -89,18 +186,17 @@ class Slider extends React.Component {
     })
   }
 
-
   mouseClick (e){
+    console.log('inside mouse click')
     // only left mouse button
     if(e.button === 0 || (e.touches && e.touches.length)){
+      console.log('inside iffffff');
       const inputPosition = this.getInputPositionX(e);
-      this.setPosition(inputPosition);
+      this.sliderButtonHandler(inputPosition)
       e.stopPropagation()
       e.preventDefault()
     }
   }
-
-
 
   componentDidMount (){
     // window.addEventListener('resize', this.handleResize);
@@ -109,43 +205,56 @@ class Slider extends React.Component {
     //the drag needs to be not just on the slider, but the spaces above it.
     window.addEventListener('mousemove', this.mouseMove)
     window.addEventListener('mouseup', this.mouseUp)
-    this.setState({
-      dragging: false
-    })
+    // window.addEventListener('resize', function (){
+    //   console.log('i am resizing!!!')
+    // })
+    const buttonDimensions = this.getSliderButtonDimensions();
+    const progressDimensions = this.getSliderProgressDimensions();
+    const percent = this.convertAmountToPercent(this.state.amount)
+    const relativePosition = this.getSliderButtonRelativePosition(undefined, progressDimensions.constraintLeft, progressDimensions.constraintRight, progressDimensions.constraintWidth, this.state.amount)
+    const newProps = Object.assign({dragging: false}, buttonDimensions, progressDimensions, {percent, relativePosition})
+    this.setState(newProps);
   }
-  componentWillUnmount(){
+
+  componentWillUnmount (){
     window.removeEventListener('mousemove', this.mouseMove)
     window.removeEventListener('mouseup', this.mouseUp)
   }
-  handleResize (){
-    // const bar = ReactDOM.findDOMNode(this.refs.progress).getBoundingClientRect();
-    // console.log('handleResize what is this progress bar ', bar)
-    // this.constructor.updateSliderProgressDimensions.call(this);
-  }
-
-  // shouldComponentUpdate (nextProps, nextState){
-  //   console.log('Slider.shouldComponentUpdate nextProps', nextProps)
-  //   console.log('Slider.shouldComponentUpdate this.props', this.props)
-  //   console.log('Slider.shouldComponentUpdate nextState', nextState)
-  //   console.log('Slider.shouldComponentUpdate this.state', this.state)
-  //   const test = (
-  //     nextState.constraintWidth !== this.state.constraintWidth ||
-  //     nextState.constraintLeft !== this.state.constraintLeft ||
-  //     nextState.constraintRight !== this.state.constraintRight ||
-  //     nextState.relativePosition !== this.state.relativePosition ||
-  //     nextState.dragging !== this.state.dragging ||
-  //     nextState.percent !== this.state.percent
-  //   )
-  //   console.log('Slider.shouldComponentUpdate test', test)
-  //   return test;
-  // }
 
   componentWillReceiveProps (nextProps){
     console.log('Slider.componentWillReceiveProps nextProps', nextProps)
     this.setState(nextProps)
+    // const relativePosition = this.getSliderButtonRelativePosition(nextProps.position, nextProps.constraintLeft, nextProps.constraintRight, nextProps.constraintWidth, nextProps.state.amount)
+    // console.log('!!!!!!!#@#@$#$#$#$$#$#$#$#$#$#$what is relativePosition', relativePosition)
+    // const percent = this.getSliderButtonPercent(nextProps.position, relativePosition, nextProps.constraintLeft, nextProps.constraintRight, nextProps.constraintWidth, nextProps.state.amount)
+    // // console.log('what is percent', percent)
+    // const newerNextProps = Object.assign({}, nextProps, {relativePosition, percent})
+    // this.setState(newerNextProps)
+    // this.convertAmountToPercent(percent);
+  }
+
+  shouldComponentUpdate (nextProps, nextState){
+    console.log('Slider.shouldComponentUpdate nextProps', nextProps);
+    console.log('Slider.shouldComponentUpdate this.props', this.props);
+    console.log('Slider.shouldComponentUpdate nextState', nextState);
+    console.log('Slider.shouldComponentUpdate this.state', this.state);
+    const test = (
+      nextState.position !== this.state.position ||
+      nextState.relativePosition !== this.state.relativePosition ||
+      nextState.percent !== this.state.percent ||
+      nextState.buttonWidth !== this.state.buttonWidth ||
+      nextState.buttonHeight !== this.state.buttonHeight ||
+      nextState.constraintLeft !== this.state.constraintLeft ||
+      nextState.constraintRight !== this.state.constraintRight ||
+      nextState.constraintWidth !== this.state.constraintWidth ||
+        nextState.amount !==this.state.amount
+    )
+    console.log('Slider.shouldComponentUpdate', test)
+    return test;
   }
 
   componentDidUpdate (prevProps, prevState){
+    // this.getSliderButtonRelativePositionAndPercent(this.refs.button,this.state.position)
     console.log('Slider.componentDidUpdate prevProps', prevProps);
     console.log('Slider.componentDidUpdate this.props', this.props);
     console.log('Slider.componentDidUpdate prevState', prevState);
@@ -154,7 +263,7 @@ class Slider extends React.Component {
 
 
   render (){
-    console.log('Slider.render: what is this.props', this.props)
+    // console.log('Slider.render: what is this.props', this.props)
     return (
 
       <Container
@@ -166,17 +275,14 @@ class Slider extends React.Component {
       >
         <SliderButton
           ref="button" {...this.state}
-          updateSlideButtonRelativePosition={this.constructor.updateSlideButtonRelativePosition.bind(this)}
-          convertPercentToAmount={this.constructor.convertPercentToAmount.bind(this)}
-          formatAmount={this.props.formatAmount}
-          updateAmount={this.props.updateAmount}
+          onMouseMove={this.mouseMove}
           mouseDown={this.mouseDown}
           mouseUp={this.mouseUp}
+          formatAmount={this.props.formatAmount}
         />
 
         <SliderProgress
           ref="progress" percent={this.state.percent}
-          updateSliderProgressDimensions={this.constructor.updateSliderProgressDimensions.bind(this)}
         />
         <SliderAmountLimits
           formatAmount={this.props.formatAmount}
@@ -192,71 +298,6 @@ class Slider extends React.Component {
 Slider.defaultProps = {
   id: 'button',
   className: 'promisefin_slider__button'
-}
-
-Slider.updateSliderProgressDimensions = function (sliderProgress){
-
-  const sliderProgressElement = ReactDOM.findDOMNode(sliderProgress).getBoundingClientRect();
-  console.log('Slider.updateSliderProgressDimensions: sliderProgressElement.width', sliderProgressElement.width)
-  this.setState({
-    constraintLeft: sliderProgressElement.left,
-    constraintRight: sliderProgressElement.right,
-    constraintWidth: sliderProgressElement.width
-  });
-}
-
-Slider.updateSlideButtonRelativePosition = function (target, targetPosition, targetWidth){
-  let relativePosition;
-  let percent;
-  if(!targetPosition){
-    percent = this.constructor.convertAmountToPercent.call(this, this.state.amount)
-    relativePosition = this.state.constraintWidth * percent;
-  }
-  else if(targetPosition <= this.state.constraintLeft){
-    relativePosition = 0;
-    percent = 0;
-  }
-  else if(targetPosition >= this.state.constraintRight){
-    relativePosition = this.state.constraintWidth
-    percent = 1;
-  }
-  else {
-    relativePosition = targetPosition - (this.state.constraintRight - this.state.constraintWidth)
-    percent = relativePosition / this.state.constraintWidth;
-  }
-  const amount = this.constructor.convertPercentToAmount.call(this, percent);
-  this.props.updateAmount(amount)
-  this.setState({
-    relativePosition: relativePosition,
-    percent: percent
-  })
-
-}
-Slider.convertAmountToPercent = function (amount){
-  const totalUnits = ((this.state.maxAmount - this.state.minAmount) / this.state.step) + 1;
-  const amountUnitUsage = totalUnits - ((this.state.maxAmount - amount) / this.state.step);
-  const percent = amountUnitUsage / totalUnits
-  return percent;
-
-}
-Slider.convertPercentToAmount = function (percent){
-
-  const availableUnits = ((this.state.maxAmount - this.state.minAmount) / this.state.step) + 1;
-  const unit = 100 / availableUnits; //should be about 3.333
-  const remainder = 100 - (availableUnits * unit);
-
-  let unRoundedTotalUnits = (percent * 100) / unit;
-
-  unRoundedTotalUnits = unRoundedTotalUnits + remainder;
-  let amount = Math.ceil((unRoundedTotalUnits * this.state.step) / this.state.step) * this.state.step
-  if(amount < this.state.step){
-    amount = this.state.step;
-  }
-  amount = amount + 2000;
-  if(amount >= this.state.maxAmount){
-    amount = this.state.maxAmount;
-  }
-  return amount;
 }
 
 

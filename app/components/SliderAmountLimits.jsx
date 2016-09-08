@@ -12,8 +12,8 @@ class SliderProgressAmounts extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState){
-    console.log('SliderAmountLimits.shouldComponentUpdate: this.props', this.props)
-    console.log('SliderAmountLimits.shouldComponentUpdate: nextProps', nextProps)
+    // console.log('SliderAmountLimits.shouldComponentUpdate: this.props', this.props)
+    // console.log('SliderAmountLimits.shouldComponentUpdate: nextProps', nextProps)
     const test = (
       nextProps.minAmount !== this.props.minAmount ||
       nextProps.maxAmount !== this.props.maxAmount
