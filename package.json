@@ -18,13 +18,9 @@
   },
   "homepage": "https://github.com/chulander/react_egghead_tutorial#readme",
   "dependencies": {
-    "immutable": "^3.8.1",
     "numeral": "^1.5.3",
     "react": "^15.3.1",
-    "react-addons-css-transition-group": "^15.3.1",
-    "react-addons-transition-group": "^15.3.1",
     "react-dom": "^15.3.1",
-    "react-keyframes": "^0.2.2",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
