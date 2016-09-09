@@ -32,23 +32,10 @@ class SliderCard extends Component {
       nextState.minAmount !== this.state.minAmount ||
       nextState.maxAmount !== this.state.maxAmount
     )
-    console.log('RatesCard.shouldComponentUpdate', test);
     return test;
   }
 
-  componentDidMount (){
-    // console.log('RatesCard.componentDidMount')
-  }
-
-  componentDidUpdate (prevProps, prevState){
-    // console.log('RatesCard.componentDidUpdate prevProps', prevProps);
-    // console.log('RatesCard.componentDidUpdate this.props', this.props);
-    // console.log('RatesCard.componentDidUpdate prevState', prevState);
-    // console.log('RatesCard.componentDidUpdate this.state', this.state);
-  }
-
   render (){
-    // console.log('RATECARDwhat is this.state', this.state);
     const className = (this.props.className) ? `promisefin_ratecard ${this.props.className}` : 'promisefin_ratecard';
     const style=Object.assign({textAlign: 'center'}, {width: this.props.width});
     return (
@@ -66,4 +53,4 @@ SliderCard.PropTypes = {
   formatAmount: PropTypes.func.isRequired
 }
 
-export default SliderCard;
+export default SliderCard

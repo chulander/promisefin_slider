@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Content, Container} from 're-bulma';
+import {Content} from 're-bulma';
 
 class Restrictions extends Component {
   constructor (props){
@@ -26,7 +26,6 @@ class Restrictions extends Component {
     }, '');
     return `${this.props.disclaimer} ${regionList}.`
   }
-
   render (){
     return (
       <Content>

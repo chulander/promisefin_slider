@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import World from './components/World.jsx';
 import Slider from './containers/Slider';
 import Rates from './containers/Rates';
 import Restrictions from './containers/Restrictions';
 import {Container} from 're-bulma';
 import numeral from 'numeral';
+
 class CheckRates extends React.Component {
   constructor (props){
     super(props);
@@ -22,10 +22,14 @@ class CheckRates extends React.Component {
       amount: amount
     })
   }
+  componentDidMount(){
+    console.log('checkyour rate mounted!')
 
+
+  }
   render (){
     return (
-      <Container className={this.props.className} isFluid={true}>
+      <Container className={this.props.className}>
         <Slider
           amount={this.state.amount}
           minAmount={this.props.minAmount}

@@ -21,7 +21,9 @@ class SliderProgressAmounts extends Component {
     console.log('SliderAmountLimits.shouldComponentUpdate', test);
     return test;
   }
-
+  componentDidMount(){
+    console.log('componentMounted SliderAmountLimits')
+  }
   render (){
     return (
       <Level className={'is-flex-mobile'}>

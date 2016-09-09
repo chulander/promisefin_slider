@@ -1,12 +1,13 @@
 "use strict";
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Container} from 're-bulma';
 import {debounce} from 'throttle-debounce';
 import SliderButton from '../components/SliderButton';
 import SliderProgress from '../components/SliderProgress';
 import SliderAmountLimits from '../components/SliderAmountLimits';
-class Slider extends React.Component {
+
+class Slider extends Component {
 
   constructor (props){
     super(props);
@@ -36,7 +37,6 @@ class Slider extends React.Component {
     this.convertAmountToPercent = this.convertAmountToPercent.bind(this)
     this.convertPercentToAmount = this.convertPercentToAmount.bind(this)
     this.getSliderButtonPercent = this.getSliderButtonPercent.bind(this)
-    this.getButtonTopPositionRelativeToSliderProgress = this.getButtonTopPositionRelativeToSliderProgress.bind(this)
 
 
     this.getAvailableUnits = this.getAvailableUnits.bind(this)
@@ -47,6 +47,9 @@ class Slider extends React.Component {
     // Updater
     this.sliderButtonHandler = this.sliderButtonHandler.bind(this)
 
+    // Animation Helper
+    // for initial load
+    this.getAnimationMovementDetails = this.getAnimationMovementDetails.bind(this);
   }
 
   handleResize (){
@@ -60,18 +63,6 @@ class Slider extends React.Component {
 
   }
 
-  getButtonTopPositionRelativeToSliderProgress (buttonHeight){
-    // console.log('getButtonTopPositionRelativeToSliderProgress, what is this.state', this.state);
-    // console.log('getButtonTopPositionRelativeToSliderProgress, what is this.refs.progress', this.refs.progress);
-    const progressCenter = this.state.constraintTop - (this.state.constraintHeight / 2)
-    console.log('what is this progressCenter', progressCenter)
-    console.log('what is button Height', buttonHeight)
-    const buttonCenter = progressCenter - (buttonHeight/2);
-
-    console.log('what is button Center', buttonCenter);
-    // return buttonCenter;
-    return this.state.constraintTop
-  }
 
   getSliderButtonDimensions (){
     const button = ReactDOM.findDOMNode(this.refs.button).getBoundingClientRect();
@@ -122,11 +113,13 @@ class Slider extends React.Component {
     }
     else {
       const relativePosition = targetPosition - (constraintRight - constraintWidth)
-      return relativePosition
+      return (Number.isNaN(relativePosition)) ? 0 : relativePosition;
+
     }
   }
 
   getAvailableUnits (){
+    // const availableUnits = ((this.props.maxAmount - this.props.minAmount) / this.props.step) + 1;
     const availableUnits = ((this.props.maxAmount - this.props.minAmount) / this.props.step) + 1;
     return availableUnits;
   }
@@ -147,11 +140,38 @@ class Slider extends React.Component {
     return percent * unitPositionRange;
   }
 
+  getAnimationMovementDetails (targetAmount){
+
+    //this is the amount of px required per unit
+    const positionRangePerUnit = this.state.constraintWidth / this.getAvailableUnits();
+    const movementUnits = ((targetAmount) / this.props.step);
+
+    return {
+      movementUnits,
+      positionRangePerUnit
+    }
+
+  }
+
+  sliderButtonHandler (position){
+    const relativePosition = this.getSliderButtonRelativePosition(position, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount, this.state.buttonWidth)
+    const percent = this.getSliderButtonPercent(position, relativePosition, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount, this.state.buttonWidth)
+    // const amount = this.convertPercentToAmount(percent, this.state.buttonWidth/this.state.constraintWidth)
+    const unitWeight = this.getUnitWeight(this.getAvailableUnits());
+    const unitPositionRange = this.getPositionRangeFromPercent(percent, unitWeight, this.getAdjustedConstraintWidth(this.state.constraintWidth, this.state.buttonWidth))
+    const amount = this.convertPercentToAmount(percent, unitWeight);
+    this.props.updateAmount(amount);
+    this.setState({position, percent, relativePosition})
+  }
+
+  getInputPositionX (e){
+    return e.pageX || e.touches[0].pageX;
+  }
 
   convertAmountToPercent (amount, availableUnits){
     const unitsUsed = availableUnits - ((this.props.maxAmount - amount) / this.props.step);
     const percent = unitsUsed / availableUnits
-    return percent;
+    return (percent < 0) ? 0 : percent;
   }
 
   convertPercentToAmount (percent, unitWeight){
@@ -179,17 +199,6 @@ class Slider extends React.Component {
 
   }
 
-  sliderButtonHandler (position){
-    const relativePosition = this.getSliderButtonRelativePosition(position, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount, this.state.buttonWidth)
-    const percent = this.getSliderButtonPercent(position, relativePosition, this.state.constraintLeft, this.state.constraintRight, this.state.constraintWidth, this.state.amount, this.state.buttonWidth)
-    // const amount = this.convertPercentToAmount(percent, this.state.buttonWidth/this.state.constraintWidth)
-    const unitWeight = this.getUnitWeight(this.getAvailableUnits());
-    const unitPositionRange = this.getPositionRangeFromPercent(percent, unitWeight, this.getAdjustedConstraintWidth(this.state.constraintWidth, this.state.buttonWidth))
-    const amount = this.convertPercentToAmount(percent, unitWeight);
-    this.props.updateAmount(amount);
-    this.setState({position, percent, relativePosition})
-  }
-
   mouseDown (e){
     // only left mouse button
     if(e.button === 0 || (e.touches && e.touches.length)){
@@ -207,10 +216,6 @@ class Slider extends React.Component {
     })
     e.stopPropagation()
     e.preventDefault()
-  }
-
-  getInputPositionX (e){
-    return e.pageX || e.touches[0].pageX;
   }
 
   mouseClick (e){
@@ -236,8 +241,9 @@ class Slider extends React.Component {
     const progressDimensions = this.getSliderProgressDimensions();
     const percent = this.convertAmountToPercent(this.state.amount, this.getAvailableUnits())
     const relativePosition = this.getSliderButtonRelativePosition(undefined, progressDimensions.constraintLeft, progressDimensions.constraintRight, progressDimensions.constraintWidth, this.state.amount, buttonDimensions.buttonWidth)
-    const newProps = Object.assign({dragging: false}, buttonDimensions, progressDimensions, {percent, relativePosition})
+    const newProps = Object.assign({dragging: false}, buttonDimensions, progressDimensions, {percent, relativePosition, animationClassRequired: true})
     this.setState(newProps);
+
   }
 
   componentWillUnmount (){
@@ -269,7 +275,11 @@ class Slider extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState){
-
+    if(this.state.animationClassRequired === true){
+      this.setState({
+        animationClassRequired: false
+      })
+    }
   }
 
 
@@ -277,33 +287,35 @@ class Slider extends React.Component {
     return (
 
       <Container
-
         onTouchCancel={this.mouseUp}
         onTouchEnd={this.mouseUp}
         onMouseDown={this.mouseClick}
         onTouchStart={this.mouseClick}
         onMouseUp={this.mouseUp}
       >
+
         <SliderButton
           ref="button" {...this.state}
           onMouseMove={this.mouseMove}
           mouseDown={this.mouseDown}
           mouseUp={this.mouseUp}
           formatAmount={this.props.formatAmount}
+          updateAmount={this.props.updateAmount}
           class={this.props.class}
-          getButtonTopPositionRelativeToSliderProgress={this.getButtonTopPositionRelativeToSliderProgress}
+          animationClassRequired={this.state.animationClassRequired}
         />
 
         <SliderProgress
           ref="progress" percent={this.state.percent}
+          animationClassRequired={this.state.animationClassRequired}
         />
+
         <SliderAmountLimits
           formatAmount={this.props.formatAmount}
           minAmount={this.state.minAmount}
           maxAmount={this.state.maxAmount}
         />
       </Container>
-
     )
   }
 }
@@ -313,5 +325,4 @@ Slider.defaultProps = {
   class: 'promisefin_slider__button'
 }
 
-
-export default Slider;
+export default Slider
